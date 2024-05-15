@@ -1,0 +1,2676 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "2.0.1",
+        "title": "REST API proyectoUTM",
+        "description": "<html><body>Esta es la documentación de la API para el sistema de venta de una carniceria.<p>Para poder usar esta API es necesario solicitar el token y con esto poder utilizar los servicios proporcionados.</p><br><p><b>Autenticación y token de API</b></p><p>Kevin Ivan Caballero Hernandez alumno de la Universidad Tecnológica de la Mixteca (UTM) proporciona el api-token. Una vez que haya creado y confirmado su cuenta.</p></body></html>",
+        "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+        }
+    },
+    "host": "localhost:3000",
+    "basePath": "",
+    "tags": [
+        {
+            "name": "Usuarios",
+            "description": "API con operaciones relacionadas con la gestión de usuarios en la carnicería, incluyendo la obtención de información de usuarios existentes, creación de nuevos usuarios y actualización de datos de usuarios."
+        },
+        {
+            "name": "Roles",
+            "description": "API con Operaciones para administrar roles y permisos dentro de la carnicería. Permite la creación, modificación y eliminación de roles, así como asignar permisos a usuarios según sus roles."
+        },
+        {
+            "name": "Productos",
+            "description": "API con funcionalidades relacionadas con la gestión de productos en la carnicería. Incluye operaciones para obtener detalles de productos, añadir nuevos productos, actualizar existentes y eliminar productos del catálogo, así como visualizar el estado de los productos si están agotados o no."
+        },
+        {
+            "name": "Carrito",
+            "description": "API con operaciones para manejar carritos de compra de los usuarios. Permite agregar, eliminar y modificar productos en el carrito, así como realizar operaciones de checkout para completar una compra."
+        },
+        {
+            "name": "Ventas",
+            "description": "API con funcionalidades relacionadas con las ventas realizadas en la carnicería. Permite obtener detalles de transacciones, histórico de ventas, generar informes de ventas y un filtrado por fecha y porductos."
+        },
+        {
+            "name": "Ofertas",
+            "description": "API con operaciones para gestionar ofertas especiales dentro de la carnicería. Permite la creación, modificación y eliminación de ofertas, así como consultar ofertas activas."
+        },
+        {
+            "name": "Producto - Oferta",
+            "description": "API con operaciones para gestionar las relaciones entre productos y sus ofertas asignadas. Permite la creación, listado y eliminación de productos y ofertas ya existentes."
+        }
+    ],
+    "schemes": [
+        "http"
+    ],
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "paths": {
+        "/api/users/showAll/": {
+            "get": {
+                "tags": ["Usuarios"],
+                "summary": "Lista de todos los usuarios que existen en la carniceria.",
+                "description": "<p>Servicio que devuelve la información detallada de todos los usuarios que existen en la carniceria.</p><p>&nbsp;</p><p><em><strong>¿Cuáles son los usuarios existentes en la carniceria?</strong></em></p>",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "examples": {
+                            "application/json": [
+                                {
+                                    "id": 4,
+                                    "id_Rol": 4,
+                                    "nombre": "Angel Cruz",
+                                    "correo": "Angel@gmail.com",
+                                    "telefono": "2312312",
+                                    "contraseña": "789*"
+                                }
+                            ]
+                        },
+                        "schema": {
+                            "$ref": "#/definitions/Usuarios"
+                        }
+                    },
+                    "403": {
+                        "description": "Prohibido"
+                    }
+                }
+            }
+        },
+        "/api/users/listOne/{id}": {
+            "get": {
+                "tags": ["Usuarios"],
+                "summary": "Muestra la informacion de un solo usuario",
+                "description": "Servicio que muestra toda la informacion de un usuario",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "examples": {
+                            "application/json": [
+                                {
+                                    "id": 4,
+                                    "id_Rol": 4,
+                                    "nombre": "Angel Cruz",
+                                    "correo": "Angel@gmail.com",
+                                    "telefono": "2312312",
+                                    "contrasena": "789*"
+                                }
+                            ]
+                        },
+                        "schema": {
+                            "$ref": "#/definitions/Usuario"
+                        }
+                    },
+                    "403": {
+                        "description": "Prohibido"
+                    }
+                },
+                "parameters": [
+                    {
+                        "description": "apiKey",
+                        "type": "string",
+                        "in": "header",
+                        "name": "Authorization",
+                        "default": "Bearer eyJhbGciOiJIUzI1NiJ9.ZXJpa3VlQGdtYWlsLmNvbQ.v7atXtnZ9F14ahwqCSjYKQirsvjs5aWQ4MrPz-BCBSk"
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "description": "identificador del usuario",
+                        "type": "number",
+                        "default": "4"
+                    }
+                ]
+            }
+        },
+        "/api/users/listUserRol/{id}": {
+            "get": {
+                "summary": "Visualiza todos los usuarios que pertenezcan a un rol",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "description": "apiKey",
+                        "type": "string",
+                        "in": "header",
+                        "name": "Authorization",
+                        "default": "Bearer eyJhbGciOiJIUzI1NiJ9.ZXJpa3VlQGdtYWlsLmNvbQ.v7atXtnZ9F14ahwqCSjYKQirsvjs5aWQ4MrPz-BCBSk"
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id del rol",
+                        "required": true,
+                        "default": 10
+                    }
+                ],
+                "tags": ["Usuarios"],
+                "responses": {
+                    "201": {
+                        "description": "OK"
+                    },
+                    "403": {
+                        "description": "Prohibido"
+                    }
+                }
+            }
+        },
+        "/api/users/historial/{id}": {
+            "get": {
+                "summary": "Visualiza todas las compras que ha realizado un usuario",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "description": "apiKey",
+                        "type": "string",
+                        "in": "header",
+                        "name": "Authorization",
+                        "default": "Bearer eyJhbGciOiJIUzI1NiJ9.ZXJpa3VlQGdtYWlsLmNvbQ.v7atXtnZ9F14ahwqCSjYKQirsvjs5aWQ4MrPz-BCBSk"
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id del usuario",
+                        "required": true,
+                        "default": 10
+                    }
+                ],
+                "tags": ["Usuarios"],
+                "responses": {
+                    "201": {
+                        "description": "OK"
+                    },
+                    "403": {
+                        "description": "Prohibido"
+                    }
+                }
+            }
+        },
+        "/api/users/create/": {
+            "post": {
+                "summary": "Creando un usuario",
+                "operationId": "create",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "Usuario",
+                        "in": "body",
+                        "description": "Usuario agregado",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/NuevoUsuario"
+                        }
+                    }
+                ],
+                "tags": ["Usuarios"],
+                "responses": {
+                    "200": {
+                        "description": "Insertado con exito"
+                    },
+                    "403": {
+                        "description": "Prohibido"
+                    }
+                }
+            }
+        },
+        "/api/users/validarUsuario/": {
+            "post": {
+                "summary": "Validando un usuario",
+                "operationId": "validarUsuario",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "Usuario",
+                        "in": "body",
+                        "description": "Verifica si el correo y contraseña existen",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/validarUsuario"
+                        }
+                    }
+                ],
+                "tags": ["Usuarios"],
+                "responses": {
+                    "200": {
+                        "description": "Insertado con exito"
+                    },
+                    "403": {
+                        "description": "Prohibido"
+                    }
+                }
+            }
+        },
+        "/api/users/update/{id}": {
+            "put": {
+                "summary": "Modifica un usuario atraves de su id",
+                "operationId": "update",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "description": "apiKey",
+                        "type": "string",
+                        "in": "header",
+                        "name": "Authorization",
+                        "default": "Bearer eyJhbGciOiJIUzI1NiJ9.ZXJpa3VlQGdtYWlsLmNvbQ.v7atXtnZ9F14ahwqCSjYKQirsvjs5aWQ4MrPz-BCBSk"
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id del usuario",
+                        "required": true,
+                        "default": 10
+                    }, {
+                        "name": "usuario",
+                        "in": "body",
+                        "description": "Usuario",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/NuevoUsuario"
+                        }
+                    }
+                ],
+                "tags": ["Usuarios"],
+                "responses": {
+                    "201": {
+                        "description": "OK"
+                    },
+                    "403": {
+                        "description": "Prohibido"
+                    }
+                }
+            }
+        },
+        "/api/users/delete/{id}": {
+            "delete": {
+                "tags": ["Usuarios"],
+                "summary": "Eliminacion de un solo usuario",
+                "description": "Servicio que elimina la informacion de un solo usuario",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "403": {
+                        "description": "Prohibido"
+                    }
+                }
+            },
+            "parameters": [
+                {
+                    "description": "apiKey",
+                    "type": "string",
+                    "in": "header",
+                    "name": "Authorization",
+                    "default": "Bearer eyJhbGciOiJIUzI1NiJ9.ZXJpa3VlQGdtYWlsLmNvbQ.v7atXtnZ9F14ahwqCSjYKQirsvjs5aWQ4MrPz-BCBSk"
+                },
+                {
+                    "name": "id",
+                    "in": "path",
+                    "required": true,
+                    "description": "identificador del usuario",
+                    "type": "number",
+                    "default": "4"
+                }
+            ]
+        },
+        "/api/roles/showAll/": {
+            "get": {
+                "tags": ["Roles"],
+                "summary": "Lista de todos los roles que existen en la carniceria.",
+                "description": "<p>Servicio que devuelve la información detallada de todos los roles que existen en la carniceria.</p><p>&nbsp;</p><p><em><strong>¿Cuáles son los roles existentes en la carniceria?</strong></em></p>",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "examples": {
+                            "application/json": [
+                                {
+                                    "id": 1,
+                                    "nombre": "comprador",
+                                    "descripcion": "Este usuario solo puedo hacer compras."
+                                }
+                            ]
+                        },
+                        "schema": {
+                            "$ref": "#/definitions/Roles"
+                        }
+                    },
+                    "403": {
+                        "description": "Prohibido"
+                    }
+                },
+                "parameters": [
+                    {
+                        "description": "apiKey",
+                        "type": "string",
+                        "in": "header",
+                        "name": "Authorization",
+                        "default": "Bearer eyJhbGciOiJIUzI1NiJ9.ZXJpa3VlQGdtYWlsLmNvbQ.v7atXtnZ9F14ahwqCSjYKQirsvjs5aWQ4MrPz-BCBSk"
+                    }
+                ]
+            }
+        },
+        "/api/roles/listOne/{id}": {
+            "get": {
+                "tags": ["Roles"],
+                "summary": "Muestra la informacion de un solo rol",
+                "description": "Servicio que muestra toda la informacion de un rol",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "examples": {
+                            "application/json": [
+                                {
+                                    "id": 1,
+                                    "nombre": "comprador",
+                                    "descripcion": "Este usuario solo puedo hacer compras."
+                                }
+                            ]
+                        },
+                        "schema": {
+                            "$ref": "#/definitions/Rol"
+                        }
+                    },
+                    "403": {
+                        "description": "Prohibido"
+                    }
+                },
+                "parameters": [
+                    {
+                        "description": "apiKey",
+                        "type": "string",
+                        "in": "header",
+                        "name": "Authorization",
+                        "default": "Bearer eyJhbGciOiJIUzI1NiJ9.ZXJpa3VlQGdtYWlsLmNvbQ.v7atXtnZ9F14ahwqCSjYKQirsvjs5aWQ4MrPz-BCBSk"
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "description": "identificador del rol",
+                        "type": "number",
+                        "default": "4"
+                    }
+                ]
+            }
+        },
+        "/api/roles/create/": {
+            "post": {
+                "summary": "Creando un rol",
+                "operationId": "create",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "Rol",
+                        "in": "body",
+                        "description": "Rol agregado",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/NuevoRol"
+                        }
+                    }
+                ],
+                "tags": ["Roles"],
+                "responses": {
+                    "200": {
+                        "description": "Insertado con exito"
+                    },
+                    "403": {
+                        "description": "Prohibido"
+                    }
+                }
+            }
+        },
+        "/api/roles/update/{id}": {
+            "put": {
+                "summary": "Modifica un rol atraves de su id",
+                "operationId": "update",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "description": "apiKey",
+                        "type": "string",
+                        "in": "header",
+                        "name": "Authorization",
+                        "default": "Bearer eyJhbGciOiJIUzI1NiJ9.ZXJpa3VlQGdtYWlsLmNvbQ.v7atXtnZ9F14ahwqCSjYKQirsvjs5aWQ4MrPz-BCBSk"
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id del rol",
+                        "required": true,
+                        "default": 10
+                    }, {
+                        "name": "rol",
+                        "in": "body",
+                        "description": "Rol",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/NuevoRol"
+                        }
+                    }
+                ],
+                "tags": ["Roles"],
+                "responses": {
+                    "201": {
+                        "description": "OK"
+                    },
+                    "403": {
+                        "description": "Prohibido"
+                    }
+                }
+            }
+        },
+        "/api/roles/delete/{id}": {
+            "delete": {
+                "tags": ["Roles"],
+                "summary": "Eliminacion de un solo rol",
+                "description": "Servicio que elimina la informacion de un solo rol",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "403": {
+                        "description": "Prohibido"
+                    }
+                }
+            },
+            "parameters": [
+                {
+                    "description": "apiKey",
+                    "type": "string",
+                    "in": "header",
+                    "name": "Authorization",
+                    "default": "Bearer eyJhbGciOiJIUzI1NiJ9.ZXJpa3VlQGdtYWlsLmNvbQ.v7atXtnZ9F14ahwqCSjYKQirsvjs5aWQ4MrPz-BCBSk"
+                },
+                {
+                    "name": "id",
+                    "in": "path",
+                    "required": true,
+                    "description": "identificador del rol",
+                    "type": "number",
+                    "default": "4"
+                }
+            ]
+        },
+        "/api/productos/showAll/": {
+            "get": {
+                "tags": ["Productos"],
+                "summary": "Lista de todos los productos que existen en la carniceria.",
+                "description": "<p>Servicio que devuelve la información detallada de todos los productos que existen en la carniceria.</p><p>&nbsp;</p><p><em><strong>¿Cuáles son los productos existentes en la carniceria?</strong></em></p>",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "examples": {
+                            "application/json": [
+                                {
+                                    "id": 4,
+                                    "id_animal": 1,
+                                    "nombre": "Chorizo",
+                                    "precio": 98.00,
+                                    "cantidad": 15.00,
+                                    "descripcion": "Chorizo hecho con carne de de cerdo"
+                                }
+                            ]
+                        },
+                        "schema": {
+                            "$ref": "#/definitions/Productos"
+                        }
+                    },
+                    "403": {
+                        "description": "Prohibido"
+                    }
+                },
+                "parameters": [
+                    {
+                        "description": "apiKey",
+                        "type": "string",
+                        "in": "header",
+                        "name": "Authorization",
+                        "default": "Bearer eyJhbGciOiJIUzI1NiJ9.ZXJpa3VlQGdtYWlsLmNvbQ.v7atXtnZ9F14ahwqCSjYKQirsvjs5aWQ4MrPz-BCBSk"
+                    }
+                ]
+            }
+        },
+        "/api/productos/listOne/{id}": {
+            "get": {
+                "tags": ["Productos"],
+                "summary": "Muestra la informacion de un solo producto",
+                "description": "Servicio que muestra toda la informacion de un producto",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "examples": {
+                            "application/json": [
+                                {
+                                    "id": 4,
+                                    "id_animal": 1,
+                                    "nombre": "Chorizo",
+                                    "precio": 98.00,
+                                    "cantidad": 15.00,
+                                    "descripcion": "Chorizo hecho con carne de de cerdo"
+                                }
+                            ]
+                        },
+                        "schema": {
+                            "$ref": "#/definitions/Producto"
+                        }
+                    },
+                    "403": {
+                        "description": "Prohibido"
+                    }
+                },
+                "parameters": [
+                    {
+                        "description": "apiKey",
+                        "type": "string",
+                        "in": "header",
+                        "name": "Authorization",
+                        "default": "Bearer eyJhbGciOiJIUzI1NiJ9.ZXJpa3VlQGdtYWlsLmNvbQ.v7atXtnZ9F14ahwqCSjYKQirsvjs5aWQ4MrPz-BCBSk"
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "description": "identificador del producto",
+                        "type": "number",
+                        "default": "4"
+                    }
+                ]
+            }
+        }, "/api/productos/getNombreProducto/": {
+            "get": {
+                "tags": ["Productos"],
+                "summary": "Lista de todos los nombres productos que existen en la carniceria.",
+                "description": "<p>Servicio que devuelve el nombre e id de todos los productos que existen en la carniceria.</p><p>&nbsp;</p><p><em><strong>¿Cuáles son los nombres productos existentes en la carniceria?</strong></em></p>",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "examples": {
+                            "application/json": [
+                                {
+                                    "nombre": "Chorizo",
+                                    "id": 4
+                                }
+                            ]
+                        },
+                        "schema": {
+                            "$ref": "#/definitions/Productos"
+                        }
+                    },
+                    "403": {
+                        "description": "Prohibido"
+                    }
+                },
+                "parameters": [
+                    {
+                        "description": "apiKey",
+                        "type": "string",
+                        "in": "header",
+                        "name": "Authorization",
+                        "default": "Bearer eyJhbGciOiJIUzI1NiJ9.ZXJpa3VlQGdtYWlsLmNvbQ.v7atXtnZ9F14ahwqCSjYKQirsvjs5aWQ4MrPz-BCBSk"
+                    }
+                ]
+            }
+        }, "/api/productos/getAnimal/": {
+            "get": {
+                "tags": ["Productos"],
+                "summary": "Lista de todos los animales que existen en la carniceria.",
+                "description": "<p>Servicio que devuelve el tipo de animal de todos los productos que existen en la carniceria.</p><p>&nbsp;</p><p><em><strong>¿Cuáles son los animales en la carniceria?</strong></em></p>",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "examples": {
+                            "application/json": [
+                                {
+                                    "nombre": "Chorizo",
+                                    "id": 4
+                                }
+                            ]
+                        },
+                        "schema": {
+                            "$ref": "#/definitions/Productos"
+                        }
+                    },
+                    "403": {
+                        "description": "Prohibido"
+                    }
+                },
+                "parameters": [
+                    {
+                        "description": "apiKey",
+                        "type": "string",
+                        "in": "header",
+                        "name": "Authorization",
+                        "default": "Bearer eyJhbGciOiJIUzI1NiJ9.ZXJpa3VlQGdtYWlsLmNvbQ.v7atXtnZ9F14ahwqCSjYKQirsvjs5aWQ4MrPz-BCBSk"
+                    }
+                ]
+            }
+        },
+        "/api/productos/listAnimal/{nombre}": {
+            "get": {
+                "tags": ["Productos"],
+                "summary": "Muestra todos los productos que son de un mismo animal ",
+                "description": "Servicio que muestra todos los productos que estan hechos de un mismo animal atraves del nombre del mismo",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "examples": {
+                            "application/json": [
+                                {
+                                    "id": 4,
+                                    "animal": "cerdo",
+                                    "nombre": "Chorizo",
+                                    "precio": 98.00,
+                                    "cantidad": 15.00,
+                                    "descripcion": "Chorizo hecho con carne de de cerdo"
+                                }
+                            ]
+                        },
+                        "schema": {
+                            "$ref": "#/definitions/Venta"
+                        }
+                    },
+                    "403": {
+                        "description": "Prohibido"
+                    }
+                },
+                "parameters": [
+                    {
+                        "description": "apiKey",
+                        "type": "string",
+                        "in": "header",
+                        "name": "Authorization",
+                        "default": "Bearer eyJhbGciOiJIUzI1NiJ9.ZXJpa3VlQGdtYWlsLmNvbQ.v7atXtnZ9F14ahwqCSjYKQirsvjs5aWQ4MrPz-BCBSk"
+                    },
+                    {
+                        "name": "nombre",
+                        "in": "path",
+                        "required": true,
+                        "description": "nombre del animal",
+                        "type": "string",
+                        "default": "vaca"
+                    }
+                ]
+            }
+        },
+        "/api/productos/filtraPrecio/": {
+            "post": {
+                "summary": "",
+                "operationId": "create",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "precio",
+                        "in": "body",
+                        "description": "Rango de dos precios",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/rangoPrecio"
+                        }
+                    }
+                ],
+                "tags": ["Productos"],
+                "responses": {
+                    "200": {
+                        "description": "Insertado con exito",
+                        "examples": {
+                            "application/json": [
+                                {
+                                    "id": 4,
+                                    "animal": "cerdo",
+                                    "nombre": "Chorizo",
+                                    "precio": 98.00,
+                                    "cantidad": 15.00,
+                                    "descripcion": "Chorizo hecho con carne de de cerdo"
+                                }
+                            ]
+                        },
+                        "schema": {
+                            "$ref": "#/definitions/Venta"
+                        }
+                    },
+                    "403": {
+                        "description": "Prohibido"
+                    }
+                }
+            }
+        },
+        "/api/productos/getCantidad/{id}": {
+            "get": {
+                "tags": ["Productos"],
+                "summary": "Obtiene la cantidad de un producto",
+                "description": "Servicio que obtiene la cantidad total de un solo producto atraves de su id",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "403": {
+                        "description": "Prohibido"
+                    }
+                }
+            },
+            "parameters": [
+                {
+                    "description": "apiKey",
+                    "type": "string",
+                    "in": "header",
+                    "name": "Authorization",
+                    "default": "Bearer eyJhbGciOiJIUzI1NiJ9.ZXJpa3VlQGdtYWlsLmNvbQ.v7atXtnZ9F14ahwqCSjYKQirsvjs5aWQ4MrPz-BCBSk"
+                },
+                {
+                    "name": "id",
+                    "in": "path",
+                    "required": true,
+                    "description": "identificador del producto",
+                    "type": "number",
+                    "default": "4"
+                }
+            ]
+        },
+        "/api/productos/getPrecio/{id}": {
+            "get": {
+                "tags": ["Productos"],
+                "summary": "Obtiene el precio de un producto",
+                "description": "Servicio que obtiene el precio de un kilogramo de un solo producto atraves de su id",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "403": {
+                        "description": "Prohibido"
+                    }
+                }
+            },
+            "parameters": [
+                {
+                    "description": "apiKey",
+                    "type": "string",
+                    "in": "header",
+                    "name": "Authorization",
+                    "default": "Bearer eyJhbGciOiJIUzI1NiJ9.ZXJpa3VlQGdtYWlsLmNvbQ.v7atXtnZ9F14ahwqCSjYKQirsvjs5aWQ4MrPz-BCBSk"
+                },
+                {
+                    "name": "id",
+                    "in": "path",
+                    "required": true,
+                    "description": "identificador del producto",
+                    "type": "number",
+                    "default": "4"
+                }
+            ]
+        },
+        "/api/productos/create/": {
+            "post": {
+                "summary": "Creando un producto",
+                "operationId": "create",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "Producto",
+                        "in": "body",
+                        "description": "Producto agregado",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/NuevoProducto"
+                        }
+                    }
+                ],
+                "tags": ["Productos"],
+                "responses": {
+                    "200": {
+                        "description": "Insertado con exito"
+                    },
+                    "403": {
+                        "description": "Prohibido"
+                    }
+                }
+            }
+        },
+        "/api/productos/update/{id}": {
+            "put": {
+                "summary": "Modifica un producto atraves de su id",
+                "operationId": "update",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "description": "apiKey",
+                        "type": "string",
+                        "in": "header",
+                        "name": "Authorization",
+                        "default": "Bearer eyJhbGciOiJIUzI1NiJ9.ZXJpa3VlQGdtYWlsLmNvbQ.v7atXtnZ9F14ahwqCSjYKQirsvjs5aWQ4MrPz-BCBSk"
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id del producto",
+                        "required": true,
+                        "default": 10
+                    }, {
+                        "name": "producto",
+                        "in": "body",
+                        "description": "Producto",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/NuevoProducto"
+                        }
+                    }
+                ],
+                "tags": ["Productos"],
+                "responses": {
+                    "201": {
+                        "description": "OK"
+                    },
+                    "403": {
+                        "description": "Prohibido"
+                    }
+                }
+            }
+        },
+        "/api/productos/delete/{id}": {
+            "delete": {
+                "tags": ["Productos"],
+                "summary": "Eliminacion de un solo producto",
+                "description": "Servicio que elimina la informacion de un solo producto",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "403": {
+                        "description": "Prohibido"
+                    }
+                }
+            },
+            "parameters": [
+                {
+                    "description": "apiKey",
+                    "type": "string",
+                    "in": "header",
+                    "name": "Authorization",
+                    "default": "Bearer eyJhbGciOiJIUzI1NiJ9.ZXJpa3VlQGdtYWlsLmNvbQ.v7atXtnZ9F14ahwqCSjYKQirsvjs5aWQ4MrPz-BCBSk"
+                },
+                {
+                    "name": "id",
+                    "in": "path",
+                    "required": true,
+                    "description": "identificador del producto",
+                    "type": "number",
+                    "default": "4"
+                }
+            ]
+        },
+        "/api/carrito/showAll/": {
+            "get": {
+                "tags": ["Carrito"],
+                "summary": "Lista de todos los carrito que existen en la carniceria.",
+                "description": "<p>Servicio que devuelve la información detallada de todos los carritos que existen en la carniceria.</p><p>&nbsp;</p><p><em><strong>¿Cuáles son los carritos existentes en la carniceria?</strong></em></p>",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "examples": {
+                            "application/json": [
+                                {
+                                    "id": 4,
+                                    "id_usuario": 1,
+                                    "id_producto": 2,
+                                    "cantidad": 2.00
+                                }
+                            ]
+                        },
+                        "schema": {
+                            "$ref": "#/definitions/Carrito"
+                        }
+                    },
+                    "403": {
+                        "description": "Prohibido"
+                    }
+                },
+                "parameters": [
+                    {
+                        "description": "apiKey",
+                        "type": "string",
+                        "in": "header",
+                        "name": "Authorization",
+                        "default": "Bearer eyJhbGciOiJIUzI1NiJ9.ZXJpa3VlQGdtYWlsLmNvbQ.v7atXtnZ9F14ahwqCSjYKQirsvjs5aWQ4MrPz-BCBSk"
+                    }
+                ]
+            }
+        },
+        "/api/carrito/listOne/{id}": {
+            "get": {
+                "tags": ["Carrito"],
+                "summary": "Muestra la informacion de un solo carrito",
+                "description": "Servicio que muestra toda la informacion de un carrito",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "examples": {
+                            "application/json": [
+                                {
+                                    "id": 4,
+                                    "id_usuario": 1,
+                                    "id_producto": 2,
+                                    "cantidad": 2.00
+                                }
+                            ]
+                        },
+                        "schema": {
+                            "$ref": "#/definitions/Carrito"
+                        }
+                    },
+                    "403": {
+                        "description": "Prohibido"
+                    }
+                },
+                "parameters": [
+                    {
+                        "description": "apiKey",
+                        "type": "string",
+                        "in": "header",
+                        "name": "Authorization",
+                        "default": "Bearer eyJhbGciOiJIUzI1NiJ9.ZXJpa3VlQGdtYWlsLmNvbQ.v7atXtnZ9F14ahwqCSjYKQirsvjs5aWQ4MrPz-BCBSk"
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "description": "identificador del carrito",
+                        "type": "number",
+                        "default": "4"
+                    }
+                ]
+            }
+        },
+        "/api/carrito/listCarritoUsuario/{id}": {
+            "get": {
+                "summary": "Visualiza todos los carritos que tenga un usuario",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "description": "apiKey",
+                        "type": "string",
+                        "in": "header",
+                        "name": "Authorization",
+                        "default": "Bearer eyJhbGciOiJIUzI1NiJ9.ZXJpa3VlQGdtYWlsLmNvbQ.v7atXtnZ9F14ahwqCSjYKQirsvjs5aWQ4MrPz-BCBSk"
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id del usuario",
+                        "required": true,
+                        "default": 10
+                    }
+                ],
+                "tags": ["Carrito"],
+                "responses": {
+                    "201": {
+                        "description": "OK"
+                    },
+                    "403": {
+                        "description": "Prohibido"
+                    }
+                }
+            }
+        },
+        "/api/carrito/listCarritoProducto/{id}": {
+            "get": {
+                "summary": "Visualiza todos los carritos que tenga un usuario",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "description": "apiKey",
+                        "type": "string",
+                        "in": "header",
+                        "name": "Authorization",
+                        "default": "Bearer eyJhbGciOiJIUzI1NiJ9.ZXJpa3VlQGdtYWlsLmNvbQ.v7atXtnZ9F14ahwqCSjYKQirsvjs5aWQ4MrPz-BCBSk"
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id del usuario",
+                        "required": true,
+                        "default": 6
+                    }
+                ],
+                "tags": ["Carrito"],
+                "responses": {
+                    "201": {
+                        "description": "OK"
+                    },
+                    "403": {
+                        "description": "Prohibido"
+                    }
+                }
+            }
+        },
+        "/api/carrito/totalCarrito/{id}": {
+            "get": {
+                "summary": "Precio total de todos los productos de un carrito",
+                "description": "Servicios que calcula el total del carrito de un solo usuario",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "description": "apiKey",
+                        "type": "string",
+                        "in": "header",
+                        "name": "Authorization",
+                        "default": "Bearer eyJhbGciOiJIUzI1NiJ9.ZXJpa3VlQGdtYWlsLmNvbQ.v7atXtnZ9F14ahwqCSjYKQirsvjs5aWQ4MrPz-BCBSk"
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id del usuario",
+                        "required": true,
+                        "default": 10
+                    }
+                ],
+                "tags": ["Carrito"],
+                "responses": {
+                    "201": {
+                        "description": "OK"
+                    },
+                    "403": {
+                        "description": "Prohibido"
+                    }
+                }
+            }
+        },
+        "/api/carrito/create/": {
+            "post": {
+                "summary": "Creando un carrito",
+                "operationId": "create",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "Carrito",
+                        "in": "body",
+                        "description": "Carrito agregado",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/NuevoCarrito"
+                        }
+                    }
+                ],
+                "tags": ["Carrito"],
+                "responses": {
+                    "200": {
+                        "description": "Insertado con exito"
+                    },
+                    "403": {
+                        "description": "Prohibido"
+                    }
+                }
+            }
+        },
+        "/api/carrito/update/{id}": {
+            "put": {
+                "summary": "Modifica un carrito atraves de su id",
+                "operationId": "update",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "description": "apiKey",
+                        "type": "string",
+                        "in": "header",
+                        "name": "Authorization",
+                        "default": "Bearer eyJhbGciOiJIUzI1NiJ9.ZXJpa3VlQGdtYWlsLmNvbQ.v7atXtnZ9F14ahwqCSjYKQirsvjs5aWQ4MrPz-BCBSk"
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id del carrito",
+                        "required": true,
+                        "default": 10
+                    }, {
+                        "name": "carrito",
+                        "in": "body",
+                        "description": "Carrito",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/NuevoCarrito"
+                        }
+                    }
+                ],
+                "tags": ["Carrito"],
+                "responses": {
+                    "201": {
+                        "description": "OK"
+                    },
+                    "403": {
+                        "description": "Prohibido"
+                    }
+                }
+            }
+        },
+        "/api/carrito/delete/{id}": {
+            "delete": {
+                "tags": ["Carrito"],
+                "summary": "Eliminacion de un solo carrito",
+                "description": "Servicio que elimina la informacion de un solo carrito",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "403": {
+                        "description": "Prohibido"
+                    }
+                }
+            },
+            "parameters": [
+                {
+                    "description": "apiKey",
+                    "type": "string",
+                    "in": "header",
+                    "name": "Authorization",
+                    "default": "Bearer eyJhbGciOiJIUzI1NiJ9.ZXJpa3VlQGdtYWlsLmNvbQ.v7atXtnZ9F14ahwqCSjYKQirsvjs5aWQ4MrPz-BCBSk"
+                },
+                {
+                    "name": "id",
+                    "in": "path",
+                    "required": true,
+                    "description": "identificador del carrito",
+                    "type": "number",
+                    "default": "4"
+                }
+            ]
+        },
+        "/api/ventas/showAll/": {
+            "get": {
+                "tags": ["Ventas"],
+                "summary": "Lista de todos las ventas que existen en la carniceria.",
+                "description": "<p>Servicio que devuelve la información detallada de todos las ventas que existen en la carniceria.</p><p>&nbsp;</p><p><em><strong>¿Cuáles son las ventas existentes en la carniceria?</strong></em></p>",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "examples": {
+                            "application/json": [
+                                {
+                                    "id": 4,
+                                    "id_usuario": 1,
+                                    "id_producto": 2,
+                                    "cantidad": 2.00,
+                                    "fecha": "15-02-2023",
+                                    "monto": 540
+                                }
+                            ]
+                        },
+                        "schema": {
+                            "$ref": "#/definitions/Ventas"
+                        }
+                    },
+                    "403": {
+                        "description": "Prohibido"
+                    }
+                }, "parameters": [
+                    {
+                        "description": "apiKey",
+                        "type": "string",
+                        "in": "header",
+                        "name": "Authorization",
+                        "default": "Bearer eyJhbGciOiJIUzI1NiJ9.ZXJpa3VlQGdtYWlsLmNvbQ.v7atXtnZ9F14ahwqCSjYKQirsvjs5aWQ4MrPz-BCBSk"
+                    }
+                ]
+            }
+        },
+        "/api/ventas/listOne/{id}": {
+            "get": {
+                "tags": ["Ventas"],
+                "summary": "Muestra la informacion de una sola venta",
+                "description": "Servicio que muestra toda la informacion de una venta",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "examples": {
+                            "application/json": [
+                                {
+                                    "id": 4,
+                                    "id_usuario": 1,
+                                    "id_producto": 2,
+                                    "cantidad": 2.00,
+                                    "fecha": "15-02-2023",
+                                    "monto": 540
+                                }
+                            ]
+                        },
+                        "schema": {
+                            "$ref": "#/definitions/Ventas"
+                        }
+                    },
+                    "403": {
+                        "description": "Prohibido"
+                    }
+                },
+                "parameters": [
+                    {
+                        "description": "apiKey",
+                        "type": "string",
+                        "in": "header",
+                        "name": "Authorization",
+                        "default": "Bearer eyJhbGciOiJIUzI1NiJ9.ZXJpa3VlQGdtYWlsLmNvbQ.v7atXtnZ9F14ahwqCSjYKQirsvjs5aWQ4MrPz-BCBSk"
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "description": "identificador del ventas",
+                        "type": "number",
+                        "default": "4"
+                    }
+                ]
+            }
+        },
+        "/api/ventas/ventasProducto/{id}": {
+            "get": {
+                "tags": ["Ventas"],
+                "summary": "Muestra la informacion de todas las ventas de un solo producto",
+                "description": "Servicio que muestra toda la informacion de todas las veces que se ha realizado una compra de un solo producto",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Ventas"
+                        }
+                    },
+                    "403": {
+                        "description": "Prohibido"
+                    }
+                },
+                "parameters": [
+                    {
+                        "description": "apiKey",
+                        "type": "string",
+                        "in": "header",
+                        "name": "Authorization",
+                        "default": "Bearer eyJhbGciOiJIUzI1NiJ9.ZXJpa3VlQGdtYWlsLmNvbQ.v7atXtnZ9F14ahwqCSjYKQirsvjs5aWQ4MrPz-BCBSk"
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "description": "identificador del producto",
+                        "type": "number",
+                        "default": "1"
+                    }
+                ]
+            }
+        },
+        "/api/ventas/totalVentaProducto/{id}": {
+            "get": {
+                "tags": ["Ventas"],
+                "summary": "Muestra el numero total de veces que se ha vendido un producto",
+                "description": "Servicio que muestra toda el numero total de veces que se ha vendido un producto",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Ventas"
+                        }
+                    },
+                    "403": {
+                        "description": "Prohibido"
+                    }
+                },
+                "parameters": [
+                    {
+                        "description": "apiKey",
+                        "type": "string",
+                        "in": "header",
+                        "name": "Authorization",
+                        "default": "Bearer eyJhbGciOiJIUzI1NiJ9.ZXJpa3VlQGdtYWlsLmNvbQ.v7atXtnZ9F14ahwqCSjYKQirsvjs5aWQ4MrPz-BCBSk"
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "description": "identificador del producto",
+                        "type": "number",
+                        "default": "1"
+                    }
+                ]
+            }
+        },
+        "/api/ventas/gananciaVentaProducto/{id}": {
+            "get": {
+                "tags": ["Ventas"],
+                "summary": "Muestra la ganancia total de un producto",
+                "description": "Servicio que muestra la ganancia total de un producto vendido",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Ventas"
+                        }
+                    },
+                    "403": {
+                        "description": "Prohibido"
+                    }
+                },
+                "parameters": [
+                    {
+                        "description": "apiKey",
+                        "type": "string",
+                        "in": "header",
+                        "name": "Authorization",
+                        "default": "Bearer eyJhbGciOiJIUzI1NiJ9.ZXJpa3VlQGdtYWlsLmNvbQ.v7atXtnZ9F14ahwqCSjYKQirsvjs5aWQ4MrPz-BCBSk"
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "description": "identificador del producto",
+                        "type": "number",
+                        "default": "1"
+                    }
+                ]
+            }
+        },
+        "/api/ventas/listVentasUsuario/{id}": {
+            "get": {
+                "summary": "Visualiza todas las compras que tenga un usuario",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "description": "apiKey",
+                        "type": "string",
+                        "in": "header",
+                        "name": "Authorization",
+                        "default": "Bearer eyJhbGciOiJIUzI1NiJ9.ZXJpa3VlQGdtYWlsLmNvbQ.v7atXtnZ9F14ahwqCSjYKQirsvjs5aWQ4MrPz-BCBSk"
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id del usuario",
+                        "required": true,
+                        "default": 10
+                    }
+                ],
+                "tags": ["Ventas"],
+                "responses": {
+                    "201": {
+                        "description": "OK"
+                    },
+                    "403": {
+                        "description": "Prohibido"
+                    }
+                }
+            }
+        },
+        "/api/ventas/filtraYear/{year}": {
+            "get": {
+                "tags": ["Ventas"],
+                "summary": "Muestra todas las ventas realizadas dentro de un año",
+                "description": "Servicio que muestra las ventas realizadas dentro de un año especifico",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Ventas"
+                        }
+                    },
+                    "403": {
+                        "description": "Prohibido"
+                    }
+                },
+                "parameters": [
+                    {
+                        "description": "apiKey",
+                        "type": "string",
+                        "in": "header",
+                        "name": "Authorization",
+                        "default": "Bearer eyJhbGciOiJIUzI1NiJ9.ZXJpa3VlQGdtYWlsLmNvbQ.v7atXtnZ9F14ahwqCSjYKQirsvjs5aWQ4MrPz-BCBSk"
+                    },
+                    {
+                        "name": "year",
+                        "in": "path",
+                        "required": true,
+                        "description": "año para filtrar",
+                        "type": "number",
+                        "default": "2023"
+                    }
+                ]
+            }
+        },
+        "/api/ventas/filtraMonthYear/{year}/{mes}": {
+            "get": {
+                "tags": ["Ventas"],
+                "summary": "Muestra todas las ventas realizadas dentro de un año",
+                "description": "Servicio que muestra las ventas realizadas dentro de un año especifico",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Ventas"
+                        }
+                    },
+                    "403": {
+                        "description": "Prohibido"
+                    }
+                },
+                "parameters": [
+                    {
+                        "description": "apiKey",
+                        "type": "string",
+                        "in": "header",
+                        "name": "Authorization",
+                        "default": "Bearer eyJhbGciOiJIUzI1NiJ9.ZXJpa3VlQGdtYWlsLmNvbQ.v7atXtnZ9F14ahwqCSjYKQirsvjs5aWQ4MrPz-BCBSk"
+                    },
+                    {
+                        "name": "year",
+                        "in": "path",
+                        "required": true,
+                        "description": "año para filtrar",
+                        "type": "number",
+                        "default": "2023"
+                    }, {
+                        "name": "mess",
+                        "in": "path",
+                        "required": true,
+                        "description": "mes para filtrar",
+                        "type": "number",
+                        "default": "12"
+                    }
+                ]
+            }
+        },
+        "/api/ventas/filtraMonto/": {
+            "post": {
+                "summary": "Retorna las ventas que han sido hechas entre un rango de precios",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "Monto",
+                        "in": "body",
+                        "description": "Rango de dos precios",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/rangoPrecio"
+                        }
+                    }
+                ],
+                "tags": ["Ventas"],
+                "responses": {
+                    "200": {
+                        "description": "Insertado con exito",
+                        "examples": {
+                            "application/json": [
+                                {
+                                    "id": 4,
+                                    "id_usuario": 1,
+                                    "id_producto": 2,
+                                    "cantidad": 2.00,
+                                    "fecha": "15-02-2023",
+                                    "monto": 540
+                                }
+                            ]
+                        },
+                        "schema": {
+                            "$ref": "#/definitions/Ventas"
+                        }
+                    },
+                    "403": {
+                        "description": "Prohibido"
+                    }
+                }
+            }
+        },
+        "/api/ventas/create/": {
+            "post": {
+                "summary": "Creando una venta",
+                "operationId": "create",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "Venta",
+                        "in": "body",
+                        "description": "Venta agregada",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/NuevoVenta"
+                        }
+                    }
+                ],
+                "tags": ["Ventas"],
+                "responses": {
+                    "200": {
+                        "description": "Insertado con exito"
+                    },
+                    "403": {
+                        "description": "Prohibido"
+                    }
+                }
+            }
+        },
+        "/api/ventas/update/{id}": {
+            "put": {
+                "summary": "Modifica una venta atraves de su id",
+                "operationId": "update",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "description": "apiKey",
+                        "type": "string",
+                        "in": "header",
+                        "name": "Authorization",
+                        "default": "Bearer eyJhbGciOiJIUzI1NiJ9.ZXJpa3VlQGdtYWlsLmNvbQ.v7atXtnZ9F14ahwqCSjYKQirsvjs5aWQ4MrPz-BCBSk"
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id de la venta",
+                        "required": true,
+                        "default": 10
+                    }, {
+                        "name": "ventas",
+                        "in": "body",
+                        "description": "Ventas",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/NuevoVenta"
+                        }
+                    }
+                ],
+                "tags": ["Ventas"],
+                "responses": {
+                    "201": {
+                        "description": "OK"
+                    },
+                    "403": {
+                        "description": "Prohibido"
+                    }
+                }
+            }
+        },
+        "/api/ventas/delete/{id}": {
+            "delete": {
+                "tags": ["Ventas"],
+                "summary": "Eliminacion de una sola venta",
+                "description": "Servicio que elimina la informacion de una sola venta",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "403": {
+                        "description": "Prohibido"
+                    }
+                }
+            },
+            "parameters": [
+                {
+                    "description": "apiKey",
+                    "type": "string",
+                    "in": "header",
+                    "name": "Authorization",
+                    "default": "Bearer eyJhbGciOiJIUzI1NiJ9.ZXJpa3VlQGdtYWlsLmNvbQ.v7atXtnZ9F14ahwqCSjYKQirsvjs5aWQ4MrPz-BCBSk"
+                },
+                {
+                    "name": "id",
+                    "in": "path",
+                    "required": true,
+                    "description": "identificador de la venta",
+                    "type": "number",
+                    "default": "4"
+                }
+            ]
+        },
+        "/api/ofertas/showAll/": {
+            "get": {
+                "tags": ["Ofertas"],
+                "summary": "Lista de todas las ofertas que existen en la carniceria.",
+                "description": "<p>Devuelve la información detallada de todas las ofertas disponibles en la carnicería.</p><p>&nbsp;</p><p><em><strong>¿Cuáles son las ofertas existentes en la carnicería?</strong></em></p>",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "examples": {
+                            "application/json": [
+                                {
+                                    "id": 1,
+                                    "nombre": "Primera prueba",
+                                    "fecha_inicio": "06-04-2024",
+                                    "fecha_fin": "07-04-2024"
+                                },
+                                {
+                                    "id": 2,
+                                    "nombre": "Oferta pasada",
+                                    "fecha_inicio": "01-04-2024",
+                                    "fecha_fin": "05-04-2024"
+                                },
+                                {
+                                    "id": 3,
+                                    "nombre": "Oferta de examenes",
+                                    "fecha_inicio": "03-04-2024",
+                                    "fecha_fin": "10-04-2024"
+                                }
+                            ]
+                        },
+                        "schema": {
+                            "$ref": "#/definitions/Ofertas"
+                        }
+                    },
+                    "403": {
+                        "description": "Prohibido"
+                    }
+                }, "parameters": [
+                    {
+                        "description": "apiKey",
+                        "type": "string",
+                        "in": "header",
+                        "name": "Authorization",
+                        "default": "Bearer eyJhbGciOiJIUzI1NiJ9.ZXJpa3VlQGdtYWlsLmNvbQ.v7atXtnZ9F14ahwqCSjYKQirsvjs5aWQ4MrPz-BCBSk"
+                    }
+                ]
+            }
+        },
+        "/api/ofertas/listOne/{id}": {
+            "get": {
+                "tags": ["Ofertas"],
+                "summary": "Muestra la informacion de una sola oferta",
+                "description": "<p>Obtiene los detalles de una oferta específica según su ID en la carnicería.</p><p>&nbsp;</p><p><em><strong>¿Cuáles son los detalles de la oferta específica en la carnicería?</strong></em></p>",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "examples": {
+                            "application/json": [
+                                {
+                                    "id": 1,
+                                    "nombre": "Primera prueba",
+                                    "fecha_inicio": "06-04-2024",
+                                    "fecha_fin": "07-04-2024"
+                                }
+                            ]
+                        },
+                        "schema": {
+                            "$ref": "#/definitions/Ofertas"
+                        }
+                    },
+                    "403": {
+                        "description": "Prohibido"
+                    }
+                },
+                "parameters": [
+                    {
+                        "description": "apiKey",
+                        "type": "string",
+                        "in": "header",
+                        "name": "Authorization",
+                        "default": "Bearer eyJhbGciOiJIUzI1NiJ9.ZXJpa3VlQGdtYWlsLmNvbQ.v7atXtnZ9F14ahwqCSjYKQirsvjs5aWQ4MrPz-BCBSk"
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "description": "identificador de la oferta",
+                        "type": "number",
+                        "default": "1"
+                    }
+                ]
+            }
+        },
+        "/api/ofertas/ofertasActivas/": {
+            "get": {
+                "tags": ["Ofertas"],
+                "summary": "Lista de todas las ofertas activas que existen en la carniceria y están actualmente activas según la fecha del sistema.",
+                "description": "<p>Servicio que devuelve la información detallada de todas las ofertas activas que existen en la carniceria.</p><p>&nbsp;</p><p><em><strong>¿Cuáles son las ofertas activas existentes en la carniceria?</strong></em></p>",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "examples": {
+                            "application/json": [
+                                {
+                                    "id": 1,
+                                    "nombre": "Primera prueba",
+                                    "fecha_inicio": "06-04-2024",
+                                    "fecha_fin": "07-04-2024"
+                                }
+                            ]
+                        },
+                        "schema": {
+                            "$ref": "#/definitions/Ofertas"
+                        }
+                    },
+                    "403": {
+                        "description": "Prohibido"
+                    }
+                }, "parameters": [
+                    {
+                        "description": "apiKey",
+                        "type": "string",
+                        "in": "header",
+                        "name": "Authorization",
+                        "default": "Bearer eyJhbGciOiJIUzI1NiJ9.ZXJpa3VlQGdtYWlsLmNvbQ.v7atXtnZ9F14ahwqCSjYKQirsvjs5aWQ4MrPz-BCBSk"
+                    }
+                ]
+            }
+        },
+        "/api/ofertas/numOfertasActivas/": {
+            "get": {
+                "tags": ["Ofertas"],
+                "summary": "Numero de ofertas activas que existen en la carniceria y están actualmente activas según la fecha del sistema.",
+                "description": "<p>Servicio que devuelve el número de ofertas activas que existen en la carniceria.</p><p>&nbsp;</p><p><em><strong>¿Cuántas ofertas activas existentes en la carniceria?</strong></em></p>",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "examples": {
+                            "application/json": [
+                                {
+                                    "numOfertasActivas": 1
+                                }
+                            ]
+                        },
+                        "schema": {
+                            "$ref": "#/definitions/Ofertas"
+                        }
+                    },
+                    "403": {
+                        "description": "Prohibido"
+                    }
+                }, "parameters": [
+                    {
+                        "description": "apiKey",
+                        "type": "string",
+                        "in": "header",
+                        "name": "Authorization",
+                        "default": "Bearer eyJhbGciOiJIUzI1NiJ9.ZXJpa3VlQGdtYWlsLmNvbQ.v7atXtnZ9F14ahwqCSjYKQirsvjs5aWQ4MrPz-BCBSk"
+                    }
+                ]
+            }
+        },
+        "/api/ofertas/duracionOfertas/": {
+            "get": {
+                "tags": ["Ofertas"],
+                "summary": "Duracion de todas las ofertas que existen en la carniceria.",
+                "description": "<p>Servicio que devuelve la duracion de todas las ofertas que existen en la carniceria.</p><p>&nbsp;</p><p><em><strong>¿Cuál es la duracion de las ofertas existentes en la carniceria?</strong></em></p>",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "examples": {
+                            "application/json": [
+                                {
+                                    "id": 1,
+                                    "nombre": "Primera prueba",
+                                    "fecha_inicio": "06-04-2024",
+                                    "fecha_fin": "07-04-2024",
+                                    "duracion": 1
+                                }
+                            ]
+                        },
+                        "schema": {
+                            "$ref": "#/definitions/Ofertas"
+                        }
+                    },
+                    "403": {
+                        "description": "Prohibido"
+                    }
+                }, "parameters": [
+                    {
+                        "description": "apiKey",
+                        "type": "string",
+                        "in": "header",
+                        "name": "Authorization",
+                        "default": "Bearer eyJhbGciOiJIUzI1NiJ9.ZXJpa3VlQGdtYWlsLmNvbQ.v7atXtnZ9F14ahwqCSjYKQirsvjs5aWQ4MrPz-BCBSk"
+                    }
+                ]
+            }
+        },
+        "/api/ofertas/ordenarFechaInicio/": {
+            "get": {
+                "tags": ["Ofertas"],
+                "summary": "Lista de todas las ofertas que existen en la carniceria ordenadas por fecha de inicio.",
+                "description": "<p>Servicio que devuelve la información detallada de todas las ofertas que existen en la carniceria ordenadas por fecha de inicio.</p><p>&nbsp;</p><p><em><strong>¿Cuáles son las ofertas existentes en la carniceria ordenadas por fecha de inicio?</strong></em></p>",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "examples": {
+                            "application/json": [
+                                {
+                                    "id": 1,
+                                    "nombre": "Primera prueba",
+                                    "fecha_inicio": "06-04-2024",
+                                    "fecha_fin": "07-04-2024"
+                                },
+                                {
+                                    "id": 3,
+                                    "nombre": "Oferta de examenes",
+                                    "fecha_inicio": "03-04-2024",
+                                    "fecha_fin": "10-04-2024"
+                                },
+                                {
+                                    "id": 2,
+                                    "nombre": "Oferta pasada",
+                                    "fecha_inicio": "01-04-2024",
+                                    "fecha_fin": "05-04-2024"
+                                }
+                            ]
+                        },
+                        "schema": {
+                            "$ref": "#/definitions/Ofertas"
+                        }
+                    },
+                    "403": {
+                        "description": "Prohibido"
+                    }
+                }, "parameters": [
+                    {
+                        "description": "apiKey",
+                        "type": "string",
+                        "in": "header",
+                        "name": "Authorization",
+                        "default": "Bearer eyJhbGciOiJIUzI1NiJ9.ZXJpa3VlQGdtYWlsLmNvbQ.v7atXtnZ9F14ahwqCSjYKQirsvjs5aWQ4MrPz-BCBSk"
+                    }
+                ]
+            }
+        },
+        "/api/ofertas/listAll_Ofertas_Producto/": {
+            "get": {
+                "tags": ["Ofertas"],
+                "summary": "Lista de todas las ofertas que existen en la carniceria y los productos asociados a cada una.",
+                "description": "<p>Servicio que devuelve la información detallada de todas las ofertas que existen en la carniceria y los productos asociados a cada una.</p><p>&nbsp;</p><p><em><strong>¿Cuáles son las ofertas existentes en la carniceria y los productos asociados a cada una?</strong></em></p>",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "examples": {
+                            "application/json": [
+                                {
+                                    "id_oferta": 1,
+                                    "id_producto": 1,
+                                    "nombre_oferta": "Primera prueba",
+                                    "precio_orig": 100,
+                                    "porc_descuento": 10,
+                                    "fecha_inicio": "06-04-2024",
+                                    "fecha_fin": "07-04-2024",
+                                    "nombre_producto": "Carne de res"
+                                },
+                                {
+                                    "id_oferta": 2,
+                                    "id_producto": 2,
+                                    "nombre_oferta": "Oferta pasada",
+                                    "precio_orig": 200,
+                                    "porc_descuento": 20,
+                                    "fecha_inicio": "01-04-2024",
+                                    "fecha_fin": "05-04-2024",
+                                    "nombre_producto": "Carne de cerdo"
+                                }
+                            ]
+                        },
+                        "schema": {
+                            "$ref": "#/definitions/Ofertas"
+                        }
+                    },
+                    "403": {
+                        "description": "Prohibido"
+                    }
+                }, "parameters": [
+                    {
+                        "description": "apiKey",
+                        "type": "string",
+                        "in": "header",
+                        "name": "Authorization",
+                        "default": "Bearer eyJhbGciOiJIUzI1NiJ9.ZXJpa3VlQGdtYWlsLmNvbQ.v7atXtnZ9F14ahwqCSjYKQirsvjs5aWQ4MrPz-BCBSk"
+                    }
+                ]
+            }
+        },
+        "/api/ofertas/create/": {
+            "post": {
+                "summary": "Creando una oferta",
+                "description": "<p>Crea una nueva oferta en la carnicería. Permite agregar una oferta especial con detalles específicos como nombre, descripción, fechas de inicio y fin, condiciones aplicables y descuentos asociados.</p><p>&nbsp;</p><p><em><strong>¿Cuál es la nueva oferta creada en la carnicería?</strong></em></p>",
+                "operationId": "create",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "Oferta",
+                        "in": "body",
+                        "description": "Oferta agregada",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/NuevaOferta"
+                        }
+                    }
+                ],
+                "tags": ["Ofertas"],
+                "responses": {
+                    "200": {
+                        "description": "Insertado con exito"
+                    },
+                    "403": {
+                        "description": "Prohibido"
+                    }
+                }
+            }
+        },
+        "/api/ofertas/update/{id}": {
+            "put": {
+                "summary": "Modifica una oferta atraves de su id",
+                "description": "<p>Actualiza una oferta en la carnicería. Permite actualizar los datos de una oferta dado su id, con detalles específicos como nombre, descripción, fechas de inicio y fin, condiciones aplicables y descuentos asociados.</p><p>&nbsp;</p><p><em><strong>¿Cuál es la nueva oferta actualizada en la carnicería?</strong></em></p>",
+                "operationId": "update",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "description": "apiKey",
+                        "type": "string",
+                        "in": "header",
+                        "name": "Authorization",
+                        "default": "Bearer eyJhbGciOiJIUzI1NiJ9.ZXJpa3VlQGdtYWlsLmNvbQ.v7atXtnZ9F14ahwqCSjYKQirsvjs5aWQ4MrPz-BCBSk"
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id de la oferta",
+                        "required": true,
+                        "default": 1
+                    }, {
+                        "name": "ofertas",
+                        "in": "body",
+                        "description": "Ofertas",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/NuevaOferta"
+                        }
+                    }
+                ],
+                "tags": ["Ofertas"],
+                "responses": {
+                    "201": {
+                        "description": "OK"
+                    },
+                    "403": {
+                        "description": "Prohibido"
+                    }
+                }
+            }
+        },
+        "/api/ofertas/delete/{id}": {
+            "delete": {
+                "tags": ["Ofertas"],
+                "description": "<p>Elimina una oferta en la carnicería. Permite eliminar una oferta dado su id, con detalles específicos como nombre, descripción, fechas de inicio y fin, condiciones aplicables y descuentos asociados.</p><p>&nbsp;</p><p><em><strong>¿Cuál es la oferta eliminada en la carnicería?</strong></em></p>",
+                "summary": "Eliminacion de una sola oferta",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "403": {
+                        "description": "Prohibido"
+                    }
+                }
+            },
+            "parameters": [
+                {
+                    "description": "apiKey",
+                    "type": "string",
+                    "in": "header",
+                    "name": "Authorization",
+                    "default": "Bearer eyJhbGciOiJIUzI1NiJ9.ZXJpa3VlQGdtYWlsLmNvbQ.v7atXtnZ9F14ahwqCSjYKQirsvjs5aWQ4MrPz-BCBSk"
+                },
+                {
+                    "name": "id",
+                    "in": "path",
+                    "required": true,
+                    "description": "identificador de la oferta",
+                    "type": "number",
+                    "default": "4"
+                }
+            ]
+        },
+        "/api/productoOferta/list/": {
+            "get": {
+                "tags": ["Producto - Oferta"],
+                "summary": "Lista de todas las relaciones producto-oferta que existen en la carniceria.",
+                "description": "<p>Devuelve la información detallada de todas las relaciones producto-oferta en la carnicería.</p><p>&nbsp;</p><p><em><strong>¿Qué productos participan en cuáles ofertas existentes en la carnicería?</strong></em></p>",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "examples": {
+                            "application/json": [
+                                {
+                                    "id_producto": 1,
+                                    "id_oferta": 1,
+                                    "precio_orig": 98,
+                                    "porc_descuento": 20
+                                },
+                                {
+                                    "id_producto": 5,
+                                    "id_oferta": 2,
+                                    "precio_orig": 130,
+                                    "porc_descuento": 15
+                                },
+                                {
+                                    "id_producto": 14,
+                                    "id_oferta": 3,
+                                    "precio_orig": 300,
+                                    "porc_descuento": 15
+                                }
+                            ]
+                        },
+                        "schema": {
+                            "$ref": "#/definitions/ProductosOfertas"
+                        }
+                    },
+                    "403": {
+                        "description": "Prohibido"
+                    }
+                }, "parameters": [
+                    {
+                        "description": "apiKey",
+                        "type": "string",
+                        "in": "header",
+                        "name": "Authorization",
+                        "default": "Bearer eyJhbGciOiJIUzI1NiJ9.ZXJpa3VlQGdtYWlsLmNvbQ.v7atXtnZ9F14ahwqCSjYKQirsvjs5aWQ4MrPz-BCBSk"
+                    }
+                ]
+            }
+        },
+        "/api/productoOferta/listPorOferta/{id_oferta}": {
+            "get": {
+                "tags": ["Producto - Oferta"],
+                "summary": "Muestra la informacion de las relaciones producto-oferta que sean parte de la misma oferta.",
+                "description": "<p>Obtiene los detalles de las relaciones producto-oferta que comparten el mismo ID de oferta de la carnicería.</p><p>&nbsp;</p><p><em><strong>¿Cuáles son los productos incluidos en una oferta específica de la carnicería?</strong></em></p>",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "examples": {
+                            "application/json": [
+                                {
+                                    "id_producto": 1,
+                                    "id_oferta": 1,
+                                    "precio_orig": 98,
+                                    "porc_descuento": 20
+                                },
+                                {
+                                    "id_producto": 3,
+                                    "id_oferta": 1,
+                                    "precio_orig": 130,
+                                    "porc_descuento": 20
+                                }
+                            ]
+                        },
+                        "schema": {
+                            "$ref": "#/definitions/ProductosOfertas"
+                        }
+                    },
+                    "403": {
+                        "description": "Prohibido"
+                    }
+                },
+                "parameters": [
+                    {
+                        "description": "apiKey",
+                        "type": "string",
+                        "in": "header",
+                        "name": "Authorization",
+                        "default": "Bearer eyJhbGciOiJIUzI1NiJ9.ZXJpa3VlQGdtYWlsLmNvbQ.v7atXtnZ9F14ahwqCSjYKQirsvjs5aWQ4MrPz-BCBSk"
+                    },
+                    {
+                        "name": "id_oferta",
+                        "in": "path",
+                        "required": true,
+                        "description": "Identificador de la oferta",
+                        "type": "number",
+                        "default": "1"
+                    }
+                ]
+            }
+        },
+        "/api/productoOferta/listPorProducto/{id_producto}": {
+            "get": {
+                "tags": ["Producto - Oferta"],
+                "summary": "Muestra la informacion de las relaciones producto-oferta correspondientes a un producto específico.",
+                "description": "<p>Obtiene los detalles de las relaciones producto-oferta que comparten el mismo ID de producto de la carnicería.</p><p>&nbsp;</p><p><em><strong>¿En cuáles ofertas ha sido incluido un producto específico de la carnicería?</strong></em></p>",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "examples": {
+                            "application/json": [
+                                {
+                                    "id_producto": 1,
+                                    "id_oferta": 1,
+                                    "precio_orig": 98,
+                                    "porc_descuento": 20
+                                },
+                                {
+                                    "id_producto": 1,
+                                    "id_oferta": 4,
+                                    "precio_orig": 98,
+                                    "porc_descuento": 15
+                                }
+                            ]
+                        },
+                        "schema": {
+                            "$ref": "#/definitions/ProductosOfertas"
+                        }
+                    },
+                    "403": {
+                        "description": "Prohibido"
+                    }
+                },
+                "parameters": [
+                    {
+                        "description": "apiKey",
+                        "type": "string",
+                        "in": "header",
+                        "name": "Authorization",
+                        "default": "Bearer eyJhbGciOiJIUzI1NiJ9.ZXJpa3VlQGdtYWlsLmNvbQ.v7atXtnZ9F14ahwqCSjYKQirsvjs5aWQ4MrPz-BCBSk"
+                    },
+                    {
+                        "name": "id_producto",
+                        "in": "path",
+                        "required": true,
+                        "description": "Identificador del producto",
+                        "type": "number",
+                        "default": "1"
+                    }
+                ]
+            }
+        },
+        "/api/productoOferta/create/": {
+            "post": {
+                "summary": "Creando una relación producto-oferta.",
+                "description": "<p>Crea una nueva relación producto-oferta en la carnicería. Permite asociar un producto con una oferta ya existente, además de definir su precio al momento de añadirse a la oferta, junto con el porcentaje de descuento aplicado.</p><p>&nbsp;</p><p><em><strong>¿Qué producto se quiere agregar a cuál oferta existente en la carnicería?</strong></em></p>",
+                "operationId": "create",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "Producto - Oferta",
+                        "in": "body",
+                        "description": "Relación producto-oferta a agregar",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/ProductoOferta"
+                        }
+                    }
+                ],
+                "tags": ["Producto - Oferta"],
+                "responses": {
+                    "200": {
+                        "description": "Insertado con exito"
+                    },
+                    "403": {
+                        "description": "Prohibido"
+                    }
+                }
+            }
+        },
+        "/api/productoOferta/delete": {
+            "delete": {
+                "tags": ["Producto - Oferta"],
+                "description": "<p>Elimina una relación producto-oferta en la carnicería. Permite eliminar un producto de una oferta específica proporcionando ambos IDs, lo que borrará también su anterior información de precio original y descuento aplicado.</p><p>&nbsp;</p><p><em><strong>¿Cuál producto se quiere eliminar de qué oferta de la carnicería?</strong></em></p>",
+                "summary": "Eliminacion de un solo producto de una oferta específica.",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "403": {
+                        "description": "Prohibido"
+                    }
+                }
+            },
+            "parameters": [
+                {
+                    "description": "apiKey",
+                    "type": "string",
+                    "in": "header",
+                    "name": "Authorization",
+                    "default": "Bearer eyJhbGciOiJIUzI1NiJ9.ZXJpa3VlQGdtYWlsLmNvbQ.v7atXtnZ9F14ahwqCSjYKQirsvjs5aWQ4MrPz-BCBSk"
+                },
+                {
+                    "name": "ProductoOfertaIDs",
+                    "in": "body",
+                    "required": true,
+                    "description": "Identificadores del producto y oferta de la relación a eliminar",
+                    "schema": {
+                        "$ref": "#/definitions/ProductoOfertaIDs"
+                    }
+                }
+            ]
+        }
+    },
+    "definitions": {
+        "Usuario": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "number",
+                    "description": "Codigo que permite identificar al usuario"
+                },
+                "id_Rol": {
+                    "type": "number",
+                    "description": "Codigo que permite identificar el rol del usuario"
+                },
+                "nombre": {
+                    "type": "string",
+                    "description": "Nombre del usuario"
+                },
+                "correo": {
+                    "type": "string",
+                    "description": "Correo del usuario"
+                },
+                "telefono": {
+                    "type": "string",
+                    "description": "telefono del usuario"
+                },
+                "contra": {
+                    "type": "string",
+                    "description": "contraseña del usuario"
+                }
+            }
+        }, "validarUsuario": {
+            "type": "object",
+            "properties": {
+                "correo": {
+                    "type": "string",
+                    "description": "Correo del usuario"
+                },
+                "contra": {
+                    "type": "string",
+                    "description": "contraseña del usuario"
+                }
+            }
+        },
+        "Usuarios": {
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/Usuario"
+            }
+        },
+        "NuevoUsuario": {
+            "type": "object",
+            "properties": {
+                "nombre": {
+                    "type": "string",
+                    "description": "Nombre del usuario"
+                },
+                "correo": {
+                    "type": "string",
+                    "description": "Correo del usuario"
+                },
+                "id_Rol": {
+                    "type": "number",
+                    "description": "Codigo que permite identificar el rol del usuario"
+                },
+                "telefono": {
+                    "type": "string",
+                    "description": "telefono del usuario"
+                },
+                "contra": {
+                    "type": "string",
+                    "description": "contraseña del usuario"
+                }
+            }
+        },
+        "Rol": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "number",
+                    "description": "Codigo que permite identificar al rol"
+                },
+                "nombre": {
+                    "type": "string",
+                    "description": "Nombre del rol"
+                },
+                "descripcion": {
+                    "type": "string",
+                    "description": "descripcion del rol"
+                }
+            }
+        },
+        "Roles": {
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/Rol"
+            }
+        },
+        "NuevoRol": {
+            "type": "object",
+            "properties": {
+                "nombre": {
+                    "type": "string",
+                    "description": "Nombre del rol"
+                },
+                "descripcion": {
+                    "type": "string",
+                    "description": "descripcion del rol"
+                }
+            }
+        },
+        "Producto": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "number",
+                    "description": "Codigo que permite identificar al usuario"
+                },
+                "animal": {
+                    "type": "string",
+                    "description": "nombre del animal que permite identificar de que esta hecho un producto"
+                },
+                "nombre": {
+                    "type": "string",
+                    "description": "Nombre del producto"
+                },
+                "precio": {
+                    "type": "number",
+                    "description": "precio del producto en pesos mexicanos"
+                },
+                "cantidad": {
+                    "type": "number",
+                    "description": "cantidad de producto restante en kilogramos"
+                },
+                "descripcion": {
+                    "type": "string",
+                    "description": "descripcion del producto"
+                }
+            }
+        },
+        "Productos": {
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/Producto"
+            }
+        },
+        "NuevoProducto": {
+            "type": "object",
+            "properties": {
+                "animal": {
+                    "type": "string",
+                    "description": "nombre del animal que permite identificar de que esta hecho un producto"
+                },
+                "nombre": {
+                    "type": "string",
+                    "description": "Nombre del producto"
+                },
+                "precio": {
+                    "type": "number",
+                    "description": "precio del producto en pesos mexicanos"
+                },
+                "cantidad": {
+                    "type": "number",
+                    "description": "cantidad de producto restante en kilogramos"
+                },
+                "descripcion": {
+                    "type": "string",
+                    "description": "descripcion del producto"
+                }
+            }
+        },
+        "Carrito": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "number",
+                    "description": "Codigo que permite identificar al carrito"
+                },
+                "id_producto": {
+                    "type": "number",
+                    "description": "Codigo que permite identificar el producto del carrito"
+                },
+                "id_usuario": {
+                    "type": "number",
+                    "description": "Codigo que permite identificar el producto del carrito"
+                },
+                "cantidad": {
+                    "type": "number",
+                    "description": "Cantidad de producto"
+                }
+            }
+        },
+        "Carritos": {
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/Carrito"
+            }
+        },
+        "NuevoCarrito": {
+            "type": "object",
+            "properties": {
+                "id_producto": {
+                    "type": "number",
+                    "description": "Codigo que permite identificar el producto del carrito"
+                },
+                "id_usuario": {
+                    "type": "number",
+                    "description": "Codigo que permite identificar el producto del carrito"
+                },
+                "cantidad": {
+                    "type": "number",
+                    "description": "Cantidad de producto"
+                }
+            }
+        },
+        "Venta": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "number",
+                    "description": "Codigo que permite identificar al carrito"
+                },
+                "id_producto": {
+                    "type": "number",
+                    "description": "Codigo que permite identificar el producto del carrito"
+                },
+                "id_usuario": {
+                    "type": "number",
+                    "description": "Codigo que permite identificar el producto del carrito"
+                },
+                "cantidad": {
+                    "type": "number",
+                    "description": "Cantidad de producto"
+                },
+                "monto": {
+                    "type": "number",
+                    "description": "Precio del total de los productos"
+                }, "fecha": {
+                    "type": "string",
+                    "description": "Fecha de la compra"
+                }
+            }
+        },
+        "Ventas": {
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/Venta"
+            }
+        },
+        "NuevoVenta": {
+            "type": "object",
+            "properties": {
+                "id_producto": {
+                    "type": "number",
+                    "description": "Codigo que permite identificar el producto del carrito"
+                },
+                "id_usuario": {
+                    "type": "number",
+                    "description": "Codigo que permite identificar el producto del carrito"
+                },
+                "cantidad": {
+                    "type": "number",
+                    "description": "Cantidad de producto"
+                },
+                "monto": {
+                    "type": "number",
+                    "description": "Precio del total de los productos"
+                }, "fecha": {
+                    "type": "string",
+                    "description": "Fecha de la compra"
+                }
+            }
+        },
+        "rangoPrecio": {
+            "type": "object",
+            "properties": {
+                "valor1": {
+                    "type": "number",
+                    "description": "Precio minimo"
+                },
+                "valor2": {
+                    "type": "number",
+                    "description": "Precio maximo"
+                }
+            }
+        },
+        "Oferta": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "number",
+                    "description": "Codigo que permite identificar la oferta"
+                },
+                "nombre": {
+                    "type": "string",
+                    "description": "Nombre que tiene la oferta"
+                },
+                "fecha_inicio": {
+                    "type": "string",
+                    "description": "Fecha de inicio de la oferta"
+                },
+                "fecha_fin": {
+                    "type": "string",
+                    "description": "Fecha de fin de la oferta"
+                }
+            }
+        },
+        "Ofertas": {
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/Oferta"
+            }
+        },
+        "NuevaOferta": {
+            "type": "object",
+            "properties": {
+                "nombre": {
+                    "type": "string",
+                    "description": "Nombre de la oferta"
+                },
+                "fecha_inicio": {
+                    "type": "string",
+                    "description": "Fecha de inicio de la oferta de la manera siguiente 'dd-mm-yyyy'"
+                },
+                "fecha_fin": {
+                    "type": "string",
+                    "description": "Fecha de fin de la oferta de la manera siguiente 'dd-mm-yyyy'"
+                }
+            }
+        },
+        "ProductoOferta": {
+            "type": "object",
+            "properties": {
+                "id_producto": {
+                    "type": "number",
+                    "description": "Identificador del producto"
+                },
+                "id_oferta": {
+                    "type": "number",
+                    "description": "Identificador de la oferta"
+                },
+                "precio_orig": {
+                    "type": "number",
+                    "description": "Precio del producto previo a la aplicación de la oferta"
+                },
+                "porc_descuento": {
+                    "type": "number",
+                    "description": "Porcentaje de descuento aplicado al producto en la oferta"
+                }
+            }
+        },
+        "ProductosOfertas": {
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/ProductoOferta"
+            }
+        },
+        "ProductoOfertaIDs": {
+            "type": "object",
+            "properties": {
+                "id_producto": {
+                    "type": "number",
+                    "description": "Identificador del producto"
+                },
+                "id_oferta": {
+                    "type": "number",
+                    "description": "Identificador de la oferta"
+                }
+            }
+        }
+    }
+}
