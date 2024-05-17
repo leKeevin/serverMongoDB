@@ -57,8 +57,16 @@ class UserController {
             res.json(usuarios);
         });
     }
-    listOne(req) {
+    listOne(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
+            const usuario = yield user_model_1.default.findById(req.params.id);
+            res.json(usuario);
+        });
+    }
+    delete(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const user = yield user_model_1.default.findByIdAndDelete(req.params.id);
+            res.json(user_model_1.default);
         });
     }
 }

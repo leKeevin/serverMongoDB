@@ -14,7 +14,7 @@ class UserRoutes {
         // this.router.post('/validarUsuario/', userController.validarUsuario);
         // this.router.post('/validarCorreo/', userController.validarCorreo);
         // this.router.put('/update/:id',userController.update);
-        // this.router.delete('/delete/:id', userController.delete);
+        this.router.delete('/delete/:id', userController_1.userController.delete);
         this.router.get('/showAll/', userController_1.userController.list);
         this.router.get('/listOne/:id', userController_1.userController.listOne);
         // this.router.get('/listUserRol/:id',userController.listUserRol);

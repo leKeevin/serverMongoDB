@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { request, Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import { connectDB } from '../database'; //acceso a la base de datos
 import Usuario from '../models/user.model'
@@ -41,8 +41,13 @@ class UserController {
         const usuarios = await Usuario.find()
         res.json(usuarios)
     }
-    public async listOne(req: Request){
-
+    public async listOne(req: Request, res: Response): Promise<void>{
+        const usuario = await Usuario.findById(req.params.id)
+        res.json(usuario)
+    }
+    public async delete(req: Request, res:Response): Promise <void>{
+        const user = await Usuario.findByIdAndDelete(req.params.id)
+        res.json(Usuario)
     }
 }
 

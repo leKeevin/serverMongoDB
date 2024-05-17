@@ -15,7 +15,7 @@ public router: Router=Router();
         // this.router.post('/validarUsuario/', userController.validarUsuario);
         // this.router.post('/validarCorreo/', userController.validarCorreo);
         // this.router.put('/update/:id',userController.update);
-        // this.router.delete('/delete/:id', userController.delete);
+        this.router.delete('/delete/:id', userController.delete);
         this.router.get('/showAll/', userController.list );
         this.router.get('/listOne/:id', userController.listOne );
         // this.router.get('/listUserRol/:id',userController.listUserRol);
