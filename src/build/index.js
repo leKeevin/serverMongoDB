@@ -15,13 +15,14 @@ const productoRoutes_1 = __importDefault(require("./routes/productoRoutes"));
 const carritoRoutes_1 = __importDefault(require("./routes/carritoRoutes"));
 const ventaRoutes_1 = __importDefault(require("./routes/ventaRoutes"));
 const ofertasRoutes_1 = __importDefault(require("./routes/ofertasRoutes"));
+const database_1 = require("./database"); //acceso a la base de datos
 class Server {
     constructor() {
         this.app = (0, express_1.default)();
         this.config();
         this.routes();
         this.app.use('/documentacion', swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swagger_json_1.default));
-        //const db = connect();
+        (0, database_1.connectDB)();
     }
     config() {
         this.app.set('port', process.env.PORT || 3000);

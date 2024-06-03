@@ -14,11 +14,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.userController = void 0;
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
-const database_1 = require("../database"); //acceso a la base de datos
 const user_model_1 = __importDefault(require("../models/user.model"));
 class UserController {
     constructor() {
-        (0, database_1.connectDB)();
     }
     create(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -67,6 +65,30 @@ class UserController {
         return __awaiter(this, void 0, void 0, function* () {
             const user = yield user_model_1.default.findByIdAndDelete(req.params.id);
             res.json(user_model_1.default);
+        });
+    }
+    nuevaContra(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+        });
+    }
+    validarUsuario(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+        });
+    }
+    validarCorreo(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+        });
+    }
+    update(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+        });
+    }
+    listUserRol(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+        });
+    }
+    historial(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
         });
     }
 }

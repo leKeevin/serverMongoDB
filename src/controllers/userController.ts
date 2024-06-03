@@ -1,10 +1,8 @@
 import { request, Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
-import { connectDB } from '../database'; //acceso a la base de datos
 import Usuario from '../models/user.model'
 class UserController {
     constructor() {
-        connectDB();
     }
     public async create(req: Request, res: Response): Promise<void> {
         const { nombre, correo, contra, telefono,img } = req.body;
@@ -49,6 +47,26 @@ class UserController {
         const user = await Usuario.findByIdAndDelete(req.params.id)
         res.json(Usuario)
     }
+    public async nuevaContra(req : Request, res: Response){
+
+    }
+    public async validarUsuario(req : Request, res: Response){
+        
+    }
+    public async validarCorreo(req : Request, res: Response){
+        
+    }
+    public async update(req : Request, res: Response){
+        
+    }
+    public async listUserRol(req : Request, res: Response){
+        
+    }
+    public async historial(req : Request, res: Response){
+        
+    }
+
+
 }
 
 export const userController = new UserController();
