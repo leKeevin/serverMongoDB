@@ -1,0 +1,42 @@
+<div class="container">
+  <ul *ngIf=" compras != undefined  " >
+<!-----------Paginación--------------------------------------------------->
+    <ng-container *ngFor="let compra of compras|
+    paginate: {
+    itemsPerPage: pageSize,
+    currentPage: p
+    };let i=index">
+    <li ><!-- Lista de productos -->
+      <div class="row">
+        <div class="card horizontal">
+          <div class="card-image col s2 " style="padding: 2%;">
+            <!-- <img src="../../../assets/1_Imagenes/{{compra.nombre}}.jpg" alt="Imagen{{compra.nombre}}"> -->
+            <img src="{{liga}}/{{compra.id_producto}}.jpg" alt="{{liga}}/{{compra.id_producto}}.jpg">
+          </div>
+          <div class="card-stacked">
+            <div class="card-content">
+              <span *ngIf="idioma == '1'" class="card-title">{{compra.nombre}}</span>
+              <span *ngIf="idioma == '2'" class="card-title">{{compra.name}}</span>            
+              <p>{{"Cantidad de producto:" | translate}} {{compra.cantidad}}</p>
+              <p><strong>{{"Precio:" | translate}} ${{compra.monto}}</strong></p>
+              <p><strong>{{"Fecha:" | translate}} {{compra.fecha}}</strong></p>
+            
+            </div>
+          </div>
+        </div>
+      </div>
+
+      
+    </li>
+    </ng-container>
+  </ul>
+<!-----------Paginación--------------------------------------------------->
+  <div *ngIf="idioma == 1" class="row center-align">
+    <pagination-controls class="my-pagination" (pageChange)="p = ($event)" previousLabel="Anterior" 
+      nextLabel="Siguiente"></pagination-controls>
+  </div>
+  <div *ngIf="idioma == 2" class="row center-align">
+    <pagination-controls class="my-pagination" (pageChange)="p = ($event)" previousLabel="Previous" 
+    nextLabel="Next"></pagination-controls>
+  </div>
+</div>

@@ -1,0 +1,303 @@
+<label style="font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif; color: black;">
+  <p></p>
+  <h4 class="center-align">{{ 'Usuarios' | translate }}</h4>
+</label>
+
+<div class="row">
+  <div class="col m12 offset-m2">
+
+    <a class="waves-effect waves-light  btn-small red custom-btn" (click)="nuevoUsuario()">
+      <i class="material-icons left">person_add</i> {{ 'Agregar Usuario' | translate }}
+    </a>
+
+  </div>
+</div>
+
+<div class=" container ">
+  <!-- Parte de 8 columnas -->
+  <div class="row col s12 ">
+    <!-- <div class="input-field">
+        <i class="material-icons prefix">search</i>
+        <input type="text" id="busqueda" name="busqueda" [(ngModel)]="busqueda" (click)="Buscar()">
+        <label for="busqueda">Busqueda por nombre</label>
+      </div> -->
+    <table class="highlight " *ngIf="usuarios != undefined">
+      <thead>
+        <tr id="titulos" class="center-align">
+          <div class="col s1">
+            <td></td>
+          </div>
+          <div class="col s2">
+            <th>{{"Nombre" | translate}}</th>
+          </div>
+          <div class="col s2">
+            <th>{{"Correo" | translate}}</th>
+          </div>
+          <div class="col s1">
+            <th>{{"Teléfono" | translate}}</th>
+          </div>
+          <div class="col s1.5">
+            <th>{{"Rol" | translate}}</th>
+          </div>
+          <div class="col s1.5">
+            <td></td>
+          </div>
+          <div class="col s1.5">
+            <td></td>
+          </div>
+          <div class="col s1">
+            <td></td>
+          </div>
+        </tr>
+      </thead>
+      <tbody>
+        <!-----------Paginación--------------------------------------------------->
+        <ng-container *ngFor="let usuario of usuarios|
+        paginate: {
+        itemsPerPage: pageSize,
+        currentPage: p
+        };let i=index">
+          <tr>
+            <div class="col s1">
+              <td>
+                <img width="64" height="64" *ngIf="usuario.img!=0" src="{{liga}}/{{usuario.id}}.jpg?{{time}}">
+                <img width="64" height="64" *ngIf="usuario.img==0 && usuario.id_rol==1" src="{{liga}}/cliente.jpg">
+                <img width="64" height="64" *ngIf="usuario.img==0 && usuario.id_rol==2" src="{{liga}}/empleado.jpg">
+                <img width="64" height="64" *ngIf="usuario.img==0 && usuario.id_rol==3" src="{{liga}}/admin.jpg">
+              </td>
+            </div>
+
+            <div class="col s2">
+              <td>{{ usuario.nombre }}</td>
+            </div>
+            <div class="col s2">
+              <td>{{ usuario.correo }}</td>
+            </div>
+            <div class="col s1">
+              <td>{{usuario.telefono}}</td>
+            </div>
+            <div *ngIf="idioma==1" class="col s1.5">
+              <td>{{usuario.rol}}</td>
+            </div>
+            <div *ngIf="idioma==2" class="col s1.5">
+              <td>
+                <ng-container *ngFor="let rol of roles">
+                  <span *ngIf="rol.id == usuario.id_rol">
+                      {{ rol.name }}
+                  </span>
+              </ng-container>
+              </td>
+          </div>
+            <div>
+              <div class="col s1.5">
+                <td id="actualizar">
+                  <a id="actualizar" (click)="actualizarUsuario(usuario.id)"
+                    class="waves-effect waves-light blue btn-small ">{{"Actualizar" | translate}}
+                    <i class="material-icons">create</i>
+                  </a>
+                </td>
+              </div>
+              <div class="col s1.5">
+                <td id="eliminar">
+                  <a (click)="eliminarUsuario(usuario.id)"
+                    class="waves-effect waves-light red btn-small offset-m2">{{"Eliminar"
+                    |
+                    translate}}
+                    <i class="material-icons">delete</i>
+                  </a>
+                </td>
+              </div>
+              <div class="col s1">
+                <td>
+                  <a (click)="mostrarImagen(usuario.id)" href="javascript:void(0);"
+                    class="waves-effect waves-light btn-small">
+                    <i class="material-icons">image</i>
+                  </a>
+                </td>
+              </div>
+            </div>
+          </tr>
+        </ng-container>
+      </tbody>
+    </table>
+    <!-----------Paginación--------------------------------------------------->
+    <div *ngIf="idioma == 1" class="row center-align">
+      <pagination-controls class="my-pagination" (pageChange)="p = ($event)" previousLabel="Anterior"
+        nextLabel="Siguiente">
+      </pagination-controls>
+    </div>
+    <div *ngIf="idioma == 2" class="row center-align">
+      <pagination-controls class="my-pagination" (pageChange)="p = ($event)" previousLabel="Previous"
+        nextLabel="Next">
+      </pagination-controls>
+    </div>
+  </div>
+</div>
+
+
+
+<div id="modalNuevoUsuario" class="modal">
+  <div class="modal-content">
+    <div class="col s12 m6">
+      <!-- Contenido del div de nuevo -->
+      <div class="card">
+        <div class="card-content">
+          <div class="container center">
+            <h2>{{"Registro de Usuario" | translate}}</h2>
+            <form id="registroForm">
+              <div class="input-field">
+                <i class="material-icons prefix">account_circle</i>
+                <input [(ngModel)]="usuarioNuevo.nombre" type="text" id="nombreNuevo" name="nombreNuevo" required>
+                <label for="nombreNuevo">{{"Nombre" | translate}}</label>
+              </div>
+
+              <div class="input-field">
+                <i class="material-icons prefix">email</i>
+                <input [(ngModel)]="usuarioNuevo.correo" type="email" id="correoNuevo" name="correoNuevo" required>
+                <label for="correoNuevo">{{"Correo electrónico" | translate}}</label>
+              </div>
+
+              <div class="input-field">
+                <i class="material-icons prefix">phone</i>
+                <input [(ngModel)]="usuarioNuevo.telefono" type="tel" id="telefonoNuevo" name="telefonoNuevo"
+                  pattern="[0-9]{10}" required>
+                <label for="telefonoNuevo">{{"Teléfono (10 dígitos)" | translate}}</label>
+              </div>
+
+              <div class="input-field">
+                <i class="material-icons prefix">lock</i>
+                <input [(ngModel)]="usuarioNuevo.contrasena" type="password" id="passwordNuevo" name="passwordNuevo"
+                  required>
+                <label for="passwordNuevo">{{"Contraseña" | translate}}</label>
+              </div>
+
+              <div class="row">
+                <div class="col s6 center">
+                  <a (click)="guardarNuevoUsuario()">
+                    <button class="waves-effect btn-large red lighten-1 white-text modal-close" type="submit">
+                      {{"Registrar" | translate}}
+                      <i class="material-icons right">send</i>
+                    </button>
+                  </a>
+                </div>
+
+                <div class="col s6 center">
+                  <button class="modal-action modal-close waves-effect btn-large red lighten-1 white-text"
+                    type="submit">{{"Cancelar" | translate}}
+                    <i class="material-icons right">cancel</i>
+                  </button>
+                </div>
+
+              </div>
+
+
+
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div id="modalModificaUsuario" class="modal">
+  <div class="modal-content">
+    <div class="container">
+      <h2 class="center">{{"Modificación de Usuario" | translate}}</h2>
+      <form id="modificaForm">
+        <div class="row">
+          <div class="input-field col s12">
+            <i class="material-icons prefix">account_circle</i>
+            <input [(ngModel)]="usuario.nombre" type="text" id="nombre" name="nombre" required>
+            <label for="nombre" class="active">{{"Nombre" | translate}}</label>
+          </div>
+          <div class="input-field col s12">
+            <i class="material-icons prefix">email</i>
+            <input [(ngModel)]="usuario.correo" type="email" id="correo" name="correo" required>
+            <label for="correo" class="active">{{"Correo electrónico" | translate}}</label>
+          </div>
+          <div class="input-field col s12">
+            <i class="material-icons prefix">phone</i>
+            <input [(ngModel)]="usuario.telefono" type="tel" id="telefono" name="telefono" pattern="[0-9]{10}" required>
+            <label for="telefono" class="active">{{"Teléfono (10 dígitos)" | translate}}</label>
+          </div>
+
+          <div *ngIf="idioma==1" class=" col s11 offset-s1">
+            <label class="active">{{"Rol" | translate}}</label>
+            <select [(ngModel)]="usuario.id_rol" id="rol" name="rol" class="browser-default waves-block s12">
+              <option value="" disabled selected>{{"Escoge un rol" | translate}}</option>
+              <option *ngFor="let rol of roles" value="{{rol.id}}">{{ rol.nombre }}</option>
+            </select>
+          </div>
+          <div *ngIf="idioma==2" class=" col s11 offset-s1">
+            <label class="active">{{"Rol" | translate}}</label>
+            <select [(ngModel)]="usuario.id_rol" id="rol" name="rol" class="browser-default waves-block s12">
+              <option value="" disabled selected>{{"Escoge un rol" | translate}}</option>
+              <option *ngFor="let rol of roles" value="{{rol.id}}">{{ rol.name }}</option>
+            </select>
+          </div>
+
+        </div>
+        <div class="row">
+          <div class="col s6 center">
+            <a (click)="guardarActualizarUsuario()">
+              <button class="waves-effect btn-large red lighten-1 white-text" type="submit">
+                {{"Modificar" | translate}}
+                <i class="material-icons right">send</i>
+              </button>
+            </a>
+          </div>
+
+          <div class="col s6 center">
+            <button class="modal-action modal-close waves-effect btn-large red lighten-1 white-text"
+              type="submit">{{"Cancelar" | translate}}
+              <i class="material-icons right">cancel</i>
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+<div id="Imagen" class="modal">
+  <div class="modal-content">
+    <div class="row" style="margin-bottom: 0px !important;">
+      <div class="col s12">
+        <h5 class="center">{{"Imagen" | translate}}</h5>
+      </div>
+    </div>
+    <div style="border: .5px solid #78909c; padding: 10px;">
+      <div class="row">
+        <div class="input-field col s12">
+
+          <div align="center">
+            <img *ngIf="usuario.img === 1" width="64" src="{{liga}}/{{usuario.id}}.jpg"
+              alt="{{liga}}/{{usuario.id}}.jpg">
+            <img *ngIf="usuario.img === 0 && usuario.id_rol===1" width="64" src="{{liga}}/cliente.jpg" alt="{{liga}}/cliente.jpg">
+            <img *ngIf="usuario.img === 0 && usuario.id_rol===2" width="64" src="{{liga}}/empleado.jpg" alt="{{liga}}/empleado.jpg">
+            <img *ngIf="usuario.img === 0 && usuario.id_rol===3" width="64" src="{{liga}}/admin.jpg" alt="{{liga}}/admin.jpg">
+          </div>
+        </div>
+
+        <div class="input-field col s6">
+          <label>{{"Imagen" | translate}}</label>
+          <br><br>
+          <input type="file" (change)="cargandoImagen($event.target)" multiple>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col s6 center">
+          <a class="waves-effect btn-large brown lighten-3 black-text modal-close"
+            (click)="ActualizaImagen()">{{"Enviar" | translate}}</a>
+        </div>
+        <div class="col s6 center">
+          <a class="modal-action modal-close waves-effect btn-large brown lighten-3
+  black-text">{{"Cancelar" | translate}}</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
