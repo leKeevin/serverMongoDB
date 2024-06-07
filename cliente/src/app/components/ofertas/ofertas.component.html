@@ -1,0 +1,292 @@
+<div class="row">
+    <p></p>
+    <div class="col s12" style="text-align: center;">
+        <div class="switch">
+            <label style="font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;">
+                {{"Asignar ofertas" | translate}}
+                <input type="checkbox" [(ngModel)]="AGRE_VER_oferta">
+                <span class="lever"></span>
+                {{"Ver productos en oferta" | translate}}
+            </label>
+        </div>
+    </div>
+</div>
+<div class="row" *ngIf="AGRE_VER_oferta">
+    <!--  -->
+    <div class="col s10 offset-s1">
+
+        <table class="highlight" *ngIf="ofertas!=undefined">
+            <thead>
+                <tr id="titulos" class="center-align">
+                    <td style="width:20%; height: 20%;">{{"Imagen" | translate}}</td>
+                    <td>{{"Producto" | translate}}</td>
+                    <td>{{"Precio original" | translate}}</td>
+                    <td>{{"Descuento %" | translate}}</td>
+                    <td>{{"Resultado" | translate}}</td>
+                    <td>{{"Fecha inicial" | translate}}</td>
+                    <td>{{"Fecha final" | translate}}</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let producto of ofertas | 
+            paginate: { 
+                itemsPerPage: pageSize, 
+                currentPage: p 
+            }; let i = index" style=" padding-left: 5%; padding-right: 5%;">
+                    <td style="width:20%; height: 20%;">
+                        <a class="card-image" style="padding: 0%;">
+                            <!-- <img src="../../../assets/1_Imagenes/{{producto.nombre_producto}}.jpg" -->
+                            <!-- alt="Imagen{{producto.nombre_producto}}" class="custom-image-size"> -->
+                            <img src="{{liga}}/{{producto.id_producto}}.jpg" alt="{{liga}}/{{producto.id_producto}}.jpg"
+                                class="custom-image-size">
+
+                        </a>
+                    </td>
+                    <td *ngIf="idioma == '1'">{{producto.nombre_producto}}</td>
+                    <td *ngIf="idioma == '2'">{{producto.product_name}}</td>
+
+                    <td>{{producto.precio_orig}}</td>
+                    <td>
+                        {{producto.porc_descuento}}
+                    </td>
+                    <td>{{producto.precio_orig*(1-(producto.porc_descuento/100))}}</td>
+                    <td>{{producto.fecha_inicio}}</td>
+                    <td>{{producto.fecha_fin}}</td>
+                    <td>
+                        <a (click)="actualizarOferta(producto.id_oferta,producto.id_producto,producto.fecha_inicio,producto.fecha_fin,
+                producto.porc_descuento)" class="waves-effect waves-light blue btn-small ">{{"Actualizar" | translate}}
+                            <i class="material-icons">create</i>
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <!--  -->
+
+</div>
+<!-- TABAJAR EN LA CRUB DE LA TABLA DE ARRIBA -->
+<!--  -->
+<!-- ESTA ES LA PARTE DEL SWICHT PARA AGREGAR UN DESCUETO YA ESTA , NADAMS FALAT UN SERVICIO PARA CREAR UN OFERTA -->
+<div class="row" *ngIf="!AGRE_VER_oferta">
+    <div class="row">
+        <div class="container col s3 ">
+            <div class="row " style="padding: 5%;">
+
+                <div class="row col s12 card ">
+                    <h5 class="center">{{"Para activar una oferta en uno o más productos, seleccione los productos
+                        deseados." | translate}}</h5>
+                    <div>
+                        <h5 class="center" style="font-size: large;">{{"Filtrar por animal" | translate}}</h5>
+                    </div>
+                    <div *ngIf="idioma=='1'">
+                        <select [(ngModel)]="aux" id="animal" name="animal" class="browser-default waves-red s12 "
+                            (change)="listAnimal()">
+                            <option value="-1" selected>{{"Todos los animales" | translate}}</option>
+                            <option *ngFor="let animal of animales; let i = index" value="{{i}}">
+                                {{animal.nombre_animal}}</option>
+                        </select>
+                    </div>
+                    <div *ngIf="idioma=='2'">
+                        <select [(ngModel)]="aux" id="animal" name="animal" class="browser-default waves-red s12 "
+                            (change)="listAnimal()">
+                            <option value="-1" selected>{{"Todos los animales" | translate}}</option>
+                            <option *ngFor="let animal of animales; let i = index" value="{{i}}">{{animal.animal_name}}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="row center">
+                        <br>
+                        <a (click)="eliminaFiltros()">
+                            <button class="waves-effect btn-small red lighten-1 white-text " type="submit">
+                                {{"Eliminar filtros" | translate}}
+                                <i class="material-icons right">delete</i>
+                            </button>
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+            <div class="row">
+                <ul *ngIf="productos!=undefined">
+                    <li *ngFor="let producto of productos| 
+                    paginate: { 
+                        itemsPerPage: pageSize, 
+                        currentPage: p 
+                    }; let i = index" style=" padding-left: 5%; padding-right: 5%;">
+                        <div class="card horizontal" (click)="AgregaOferta(producto.id)">
+                            <div class="card-image col s3 " style="padding: 2%;">
+
+                                <img src="{{liga}}/{{producto.id}}.jpg" alt="{{liga}}/{{producto.id}}.jpg">
+
+                            </div>
+                            <div class="card-stacked">
+                                <div class="card-content">
+                                    <span *ngIf="idioma == '1'" class="card-title">{{producto.nombre}}</span>
+                                    <span *ngIf="idioma == '2'" class="card-title">{{producto.name}}</span>
+                                    <p><strong>{{"Precio por unidad:" | translate}} ${{producto.precio}}</strong></p>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </li>
+                </ul>
+            </div>
+            <div class="color_ajustar">
+                <div *ngIf="idioma == 1" class="row center-align">
+                    <pagination-controls class="my-pagination" (pageChange)="p = ($event)" previousLabel="Anterior"
+                        nextLabel="Siguiente"></pagination-controls>
+                </div>
+                <div *ngIf="idioma == 2" class="row center-align">
+                    <pagination-controls class="my-pagination" (pageChange)="p = ($event)" previousLabel="Previous"
+                        nextLabel="Next"></pagination-controls>
+                </div>
+            </div>
+        </div>
+        <div class="col s9" *ngIf="A_oferta && A_oferta.length !== 0">
+            <div style="padding-left: 5%; padding-top: 2%;
+            padding-left: 5%;">
+                <table class="highlight ">
+                    <tr id="titulos" class="center-align">
+                        <td>{{"Imagen" | translate}}</td>
+                        <td>{{"Producto" | translate}}</td>
+                        <td>{{"Precio original" | translate}}</td>
+                        <td>{{"Descuento %" | translate}}</td>
+                        <td>{{"Resultado" | translate}}</td>
+                        <td>{{"Fecha inicial" | translate}}</td>
+                        <td>{{"Fecha final" | translate}}</td>
+                    </tr>
+                    <tr *ngFor="let ModiOferta of A_oferta| 
+                        paginate: { 
+                            itemsPerPage: 4, 
+                            currentPage: p 
+                        }; let i = index">
+                        <td style="width:20%; height: 20%;"> <a class="card-image" style="padding: 0%;">
+                                <img src="../../../assets/1_Imagenes/{{ModiOferta.nombre_producto}}.jpg"
+                                    alt="Imagen{{ModiOferta.nombre_producto}}" class="custom-image-size">
+                            </a></td>
+                        <td>{{ModiOferta.nombre_producto}}</td>
+                        <td>{{ModiOferta.precio_orig}}</td>
+                        <td>
+                            <input [(ngModel)]="ModiOferta.porc_descuento" [disabled]="qOcupado" id="descuento1"
+                                type="text" class="validate s8" (change)="limitarDescuento(ModiOferta.porc_descuento)">
+
+                        </td>
+                        <td>{{ModiOferta.precio_orig*(1-(ModiOferta.porc_descuento/100))}}</td>
+                        <td>{{fecha_inicio}}</td>
+                        <td>{{fecha_final}}</td>
+                        <td>
+                            <form (click)="quitar(ModiOferta.id_producto)"><label>
+                                    <input type="checkbox" class="filled-in" checked="checked" checked="checked" />
+                                    <span>{{"Deseleccionar" | translate}}</span>
+                                </label></form>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="Oferta_aplicar">
+            </div>
+            <div class="row center-align">
+                <div class="row">
+                    <!-- <div class="input-field col s2">
+                        <input id="fecha_inicio" type="text" class="validate" [(ngModel)]="nombre">
+                        <label for="fecha_inicio">Nombre De la oferta</label>
+                    </div> -->
+                    <div class="input-field col s2">
+                        <input id="fecha_inicio" type="date" class="validate" [(ngModel)]="fecha_inicio">
+                        <label for="fecha_inicio">{{"Fecha inicial" | translate}}</label>
+                    </div>
+                    <div class="input-field col s2">
+                        <input id="fecha_final" type="date" class="validate" [(ngModel)]="fecha_final">
+                        <label for="fecha_final">{{"Fecha final" | translate}}</label>
+                    </div>
+                    <!-- 
+aplicar el mismom descuento a todos los productos
+                     -->
+                    <div class="input-field col s2">
+                        <input id="Descuentogl" type="text" class="validate" (change)="aplicarMismoDE()"
+                            [(ngModel)]="descuento" [disabled]="!qOcupado">
+                        <label for="fecha_inicio" class="active">{{"Descuento" | translate}}</label>
+                    </div>
+                    <div class="col s2">
+                        <form class="form-estilo">
+                            <label class="label-estilo1 waves-effect btn-big green lighten-1 s2">
+                                <input id="descuentoTodos" type="checkbox" (change)="aplicarMismoDE()" name="descuento"
+                                    class="filled-in asignar">
+                                <span><a class="white-text">{{"Activa el mismo descuento a todo" |
+                                        translate}}</a></span>
+                            </label>
+                        </form>
+                    </div>
+                    <a (click)="AplicarOferta()">
+                        <button class="waves-effect btn-small green lighten-1 white-text s2" type="submit"
+                            [disabled]="!A_oferta || A_oferta.length === 0">
+                            {{"Aplicar oferta" | translate}}
+                            <i class="material-icons right">send</i>
+                        </button>
+                    </a>
+
+                </div>
+            </div>
+            <div>
+                <div *ngIf="idioma == 1" class="row center-align ">
+                    <pagination-controls class="my-pagination" (pageChange)="p = ($event)" previousLabel="Anterior"
+                        nextLabel="Siguiente"></pagination-controls>
+                </div>
+                <div *ngIf="idioma == 2" class="row center-align ">
+                    <pagination-controls class="my-pagination" (pageChange)="p = ($event)" previousLabel="Previous"
+                        nextLabel="Next"></pagination-controls>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="modalModificaOferta" class="modal">
+    <div class="modal-content">
+        <div class="container">
+            <h2 class="center">{{"Modificación de Oferta" | translate}}</h2>
+            <form id="modificaForm">
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input [(ngModel)]="oferta.fecha_inicio" type="email" id="correo" name="correo" required>
+                        <label for="correo" class="active">{{"Fecha inicial" | translate}}</label>
+                    </div>
+
+                    <div class="input-field col s12">
+                        <input [(ngModel)]="oferta.fecha_fin" type="tel" id="telefono" name="telefono"
+                            pattern="[0-9]{10}" required>
+                        <label for="telefono" class="active">{{"Fecha final" | translate}}</label>
+                    </div>
+                    <div class="input-field col s12">
+                        <input [(ngModel)]="oferta.porc_descuento" type="number" name="descuento" required>
+                        <label for="descuento" class="active">{{"Descuento %" | translate}}</label>
+                    </div>
+
+
+
+
+
+
+                </div>
+                <div class="row">
+                    <div class="col s6 center">
+                        <a (click)="guardarActualizarOferta()">
+                            <button class="waves-effect btn-large red lighten-1 white-text" type="submit">
+                                {{"Modificar" | translate}}
+                                <i class="material-icons right">send</i>
+                            </button>
+                        </a>
+                    </div>
+
+                    <div class="col s6 center">
+                        <button class="modal-action modal-close waves-effect btn-large red lighten-1 white-text"
+                            type="submit">{{"Cancelar" | translate}}
+                            <i class="material-icons right">cancel</i>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

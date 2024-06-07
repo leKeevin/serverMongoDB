@@ -1,0 +1,124 @@
+<div class="container">
+  <div class="row">
+    <!-- Columna para la lista de productos -->
+    <div class="col s8">
+      <ul *ngIf="carritos != undefined">
+        <li *ngFor="let car of carritos">
+          <div class="col s12">
+            <div class="card horizontal">
+              <div class="card-image col s4 " style="padding: 2%;">
+                <img src="{{liga}}/{{car.id_producto}}.jpg" alt="{{liga}}/{{car.id_producto}}.jpg">
+                <!-- <img src="../../../assets/1_Imagenes/{{car.nombre}}.jpg" alt="Imagen{{car.nombre}}"> -->
+              </div>
+              <div class="card-stacked">
+                <div class="card-content">
+                  <span *ngIf="idioma=='2'" class="card-title">{{car.name}}</span>
+                  <span *ngIf="idioma=='1'" class="card-title">{{car.nombre}}</span>
+                  <p><strong>{{"Precio por unidad:" | translate}} ${{car.precio}}</strong></p>
+                  <p><strong>{{"Subtotal:" | translate}} ${{car.precio}}</strong></p>
+                  <p><strong>{{"Cantidad:" | translate}} {{car.cantidad}} {{"Kg" | translate}}</strong></p>
+                </div>
+                <div class="card-action">
+                  <div class="col s6 center">
+                    <a (click)="modificaCantidad(car.id)">
+                      <button class="waves-effect btn red lighten-1 white-text" type="submit">
+                        {{"Modificar cantidad" | translate}}
+                        <i class="material-icons right">edit</i>
+                      </button>
+                    </a>
+                  </div>
+
+                  <div class="col s6 center">
+                    <button (click)="eliminar(car.id)" class=" waves-effect btn red lighten-1 white-text"
+                      type="submit">{{"Eliminar" | translate}}
+                      <i class="material-icons right">delete</i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+        </li>
+      </ul>
+    </div>
+    <!-- Columna para el total de la compra -->
+    <div class=" container col s4 center">
+      <div class="card">
+        <div class="card-content">
+
+          <h5>{{"Total de la compra" | translate}}</h5>
+          <p><strong>{{"Cantidad:" | translate}} {{totalCarrito}}</strong></p>
+          <div>
+            <a (click)="compraCarrito()">
+              <button class="waves-effect btn-large red lighten-1 white-text">
+                {{"Comprar" | translate}}
+              </button>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="modalCantidad" class="modal" *ngIf=" carrito!=undefined">
+  <div class="modal-content">
+    <div class="col s12 m6">
+      <!-- Contenido del div de nuevo -->
+      <div class="card">
+        <div class="card-content">
+          <div class="container center">
+            <h2>{{"Selector de cantidad" | translate}}</h2>
+            <div class="container">
+              <p><strong>{{"Cantidad disponible:" | translate}} {{cantidadDisponible}} {{"unidades" | translate}}</strong></p>
+              <div class="seleccion">
+                <button class="waves-effect btn-small red lighten-1 white-text lef" (click)="decrementar()"
+                  id="decrementar">
+                  <i class="material-icons prefix">remove</i>
+                </button>
+                <input [(ngModel)]="carrito.cantidad" type="number" value="{{carrito.cantidad}}" class="center m2"
+                  min="1" max="{{cantidadDisponible}}">
+                <button class="waves-effect btn-small red lighten-1 white-text" (click)="aumentar()" id="incrementar">
+                  <i class="material-icons prefix">add</i>
+                </button>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col s6 center">
+                <a (click)="modificar()">
+                  <button class="waves-effect btn-large red lighten-1 white-text " type="submit">
+                    {{"Registrar" | translate}}
+                    <i class="material-icons right">send</i>
+                  </button>
+                </a>
+              </div>
+
+              <div class="col s6 center">
+                <button class="modal-action modal-close waves-effect btn-large red lighten-1 white-text"
+                  type="submit">{{"Cancelar" | translate}}
+                  <i class="material-icons right">cancel</i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="modalError" class="modal">
+  <div class="modal-content">
+    <h4>Error garrafal :(</h4>
+    <p>Hay un producto que excede la cantidad guardada en su carrito :( </p>
+  </div>
+  <div class="modal-footer">
+    <a (click)="cerrErr()">
+      <button class="waves-effect btn-large red lighten-1 white-text" type="submit">
+        OK
+      </button>
+    </a>
+  </div>
+</div>

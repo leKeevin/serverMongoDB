@@ -1,0 +1,414 @@
+<div class="row">
+  <div class="col s2 center" id="Filtros">
+    <div class="row center">
+      <br>
+      <a (click)="eliminaFiltros()">
+        <button class="waves-effect btn-small red lighten-1 white-text " type="submit">
+          {{"Eliminar filtros" | translate}}
+          <i class="material-icons right">delete</i>
+        </button>
+      </a>
+    </div>
+    <div class="col s12 card" id="FiltroPrecio">
+      <div>
+        <h5 class="center">{{"Filtrar por precio" | translate}}</h5>
+      </div>
+      <div>
+        <div class="input-field col s12">
+          <i class="material-icons prefix">money</i>
+          <input [(ngModel)]="preciomin" type="number" id="pmin" name="pmin" required>
+          <label for="pmin" class="active">{{"Precio mínimo" | translate}}</label>
+        </div>
+        <div class="input-field col s12">
+          <i class="material-icons prefix">money</i>
+          <input [(ngModel)]="preciomax" type="number" id="pmax" name="pmax" required>
+          <label for="pmax" class="active">{{"Precio máximo" | translate}}</label>
+        </div>
+        <div class="row">
+          <div class="col s12 center">
+            <a (click)="filtraprecio()">
+              <button class="waves-effect btn-small red lighten-1 white-text " type="submit">
+                {{"Filtrar" | translate}}
+                <i class="material-icons right">search</i>
+              </button>
+            </a>
+          </div>
+        </div>
+
+      </div>
+
+
+    </div>
+
+    <div class="row col s12 card " id="FiltroAnimal">
+      
+      <div  *ngIf="idioma=='1'">
+        <div>
+          <h5 class="center">Filtrar por animal</h5>
+        </div>
+        <select [(ngModel)]="aux" id="animal" name="animal" class="browser-default waves-red s12 "
+          (change)="listAnimal()">
+          <option value="-1" selected>{{"Todos los animales" | translate}}</option>
+          <option  *ngFor="let animal of animales; let i = index" value="{{i}}">{{animal.nombre_animal}}</option>
+        </select>
+      </div>
+      <div  *ngIf="idioma=='2'">
+        <div>
+          <h5 class="center">Filter by animal</h5>
+        </div>
+        <select [(ngModel)]="aux" id="animal" name="animal" class="browser-default waves-red s12 "
+          (change)="listAnimal()">
+          <option value="-1" selected>{{"Todos los animales" | translate}}</option>
+          <option *ngFor="let animal of animales; let i = index" value="{{i}}">{{animal.animal_name}}</option>
+        </select>
+      </div>
+      <br>
+
+    </div>
+
+    <div class="row" *ngIf="rol !=1">
+      <div class="col s12">
+        <a class="waves-effect btn blue  white-tex" (click)="nuevoProducto()">
+          {{"Agregar producto" | translate}}
+          <i class="material-icons">add</i>
+        </a>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="col s10 center container">
+    <div class="row">
+      <ul *ngIf="productos != undefined ">
+        <div class="row col s12">
+          <li *ngFor="let producto of productos | 
+          paginate: { 
+              itemsPerPage: pageSize, 
+              currentPage: p 
+          }; let i = index">
+
+            <div class="col s3">
+              <div class="card">
+                <div class="card-image contenedor" style="position: relative;">
+                  <!-- <img  src="../../../assets/1_Imagenes/{{producto.nombre}}.jpg" class="imagen1" alt="Imagen{{producto.nombre}}" style="width: 100%;" /> -->
+                  <img *ngIf="producto.fotito === 1" width="64" src="{{liga}}/{{producto.id}}.jpg?{{time}}"
+                    alt="{{liga}}/{{producto.id}}.jpg">
+                  <img *ngIf="producto.fotito === 0" width="64" src="{{liga}}/0.jpg" alt="{{liga}}/0.jpg">
+                  <img *ngIf="producto.oferta"
+                    [src]="idioma == 1 ? '../../../assets/img/oferta1.png' : '../../../assets/img/oferta2.png' "
+                    class="imagen2" alt="oferta.png"
+                    style="position: absolute; top: 0; left: 0; width: 50%; z-index: 1;" 
+                  />
+                </div>
+
+                <div class="card-content">
+                  <div class="row ">
+
+                    <span *ngIf="idioma == 1" class="card-title">{{producto.nombre}}</span>
+                    <span *ngIf="idioma == 2" class="card-title">{{producto.name}}</span>
+                    <p *ngIf="idioma == 1"><strong>Animal de origen:</strong> {{producto.animal}}</p>
+                    <p *ngIf="idioma == 2"><strong>Animal of origin:</strong> {{producto.animal_eng}}</p>
+                    <p><strong>{{"Precio por Kg:" | translate}}</strong> ${{producto.precio}}</p>
+                    <p><strong>{{"Cantidad disponible:" | translate}} </strong> {{producto.cantidad}} {{"Kg" |
+                      translate}}</p>
+                    <p *ngIf="idioma == 1">{{producto.descripcion}}</p>
+                    <p *ngIf="idioma == 2">{{producto.description}}</p>
+                    <div class="row " *ngIf="producto.cantidad>0">
+                      <br>
+                      <div class="col s12 center">
+                        <a (click)="agregaCarrito(producto.id, producto.cantidad)">
+                          <button class="waves-effect btn-small red lighten-1 white-text " type="submit">
+                            {{"Agregar al carrito" | translate}}
+                            <i class="material-icons right">add</i>
+                          </button>
+                        </a>
+                      </div>
+                    </div>
+                    <h5 *ngIf="producto.cantidad==0" class="black-text font-size xlarge center">
+                      <p>{{"Agotado" | translate}}</p>
+                    </h5>
+                    <div class="row col s12" *ngIf="rol!=1">
+                      <div class="col s6 center">
+                        <a (click)="modificaProducto(producto.id)">
+                          <button class="waves-effect btn-small red lighten-1 white-text " type="submit">
+                            {{"Modificar" | translate}}
+                            <i class="material-icons right">edit</i>
+                          </button>
+                        </a>
+                      </div>
+                      <div class="col s6 center">
+                        <a (click)="eliminaProducto(producto.id)">
+                          <button class="waves-effect btn-small red lighten-1 white-text " type="submit">
+                            {{"Eliminar" | translate}}
+                            <i class="material-icons right">delete</i>
+                          </button>
+                        </a>
+                      </div>
+                      <br>
+                      <br>
+                      <div class="col s12 center">
+                        <a (click)="mostrarImagen(producto.id)" href="javascript: void(0);">
+                          <button class="waves-effect btn-small red lighten-1 white-text  " type="submit">
+                            {{"Actualizar imagen" | translate}}
+                            <i class="material-icons right">image</i>
+                          </button>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </li>
+        </div>
+      </ul>
+
+
+    </div>
+    <div *ngIf="idioma == 1"class="row center-align">
+      <pagination-controls class="my-pagination" (pageChange)="p = ($event)" previousLabel="Anterior"
+        nextLabel="Siguiente"></pagination-controls>
+    </div>
+    <div *ngIf="idioma == 2"class="row center-align">
+      <pagination-controls class="my-pagination" (pageChange)="p = ($event)" previousLabel="Previous"
+        nextLabel="Next"></pagination-controls>
+    </div>
+    
+  </div>
+</div>
+
+
+<div id="modalModificaProducto" class="modal">
+  <div class="modal-content">
+    <div class="container">
+      <h2 class="center">{{"Modificación del Producto" | translate}}</h2>
+      <form id="modificaForm">
+        <div class="row">
+          <div class="input-field col s6">
+            <i class="material-icons prefix">assignment</i>
+            <input [(ngModel)]="producto.nombre" type="text" id="nombre" name="nombre" required>
+            <label for="nombre" class="active">{{"Nombre en español" | translate}}</label>
+          </div>
+          <div class="input-field col s6">
+            <i class="material-icons prefix">assignment</i>
+            <input [(ngModel)]="producto.name" type="text" id="nombre" name="nombre" required>
+            <label for="nombre" class="active">{{"Nombre en inglés" | translate}}</label>
+          </div>
+          <div class="input-field col s6">
+            <i class="material-icons prefix">pets</i>
+            <input [(ngModel)]="producto.animal" type="text" id="animal" name="animal" required>
+            <label for="animal" class="active">Animal {{"en español" | translate}}</label>
+          </div>
+          <div class="input-field col s6">
+            <i class="material-icons prefix">pets</i>
+            <input [(ngModel)]="producto.animal_eng" type="text" id="animal_eng" name="animal_eng" required>
+            <label for="animal" class="active">Animal {{"en inglés" | translate}}</label>
+          </div>
+          <div class="input-field col s12">
+            <i class="material-icons prefix">attach_money</i>
+            <input [(ngModel)]="producto.precio" type="number" id="precio" name="precio" required>
+            <label for="precio" class="active">{{"Precio" | translate}}</label>
+          </div>
+          <div class="input-field col s6">
+            <i class="material-icons prefix">comment</i>
+            <input [(ngModel)]="producto.descripcion" type="text" id="descripcion" name="descripcion" required>
+            <label for="descripcion" class="active">{{"Descripción" | translate}} {{"en español" | translate}} </label>
+          </div>
+          <div class="input-field col s6">
+            <i class="material-icons prefix">comment</i>
+            <input [(ngModel)]="producto.description" type="text" id="description" name="description" required>
+            <label for="descripcion" class="active">{{"Descripción" | translate}} {{"en inglés" | translate}}</label>
+          </div>
+          <div class="input-field col s12">
+            <i class="material-icons prefix">money</i>
+            <input [(ngModel)]="producto.cantidad" type="number" id="cantidad" name="cantidad" required>
+            <label for="cantidad" class="active">{{"Cantidad disponible" | translate}}</label>
+          </div>
+
+
+        </div>
+        <div class="row">
+          <div class="col s6 center">
+            <a (click)="guardaModifica()">
+              <button class=" modal-action modal-close waves-effect btn-large red lighten-1 white-text" type="submit">
+                {{"Modificar" | translate}}
+                <i class="material-icons right">send</i>
+              </button>
+            </a>
+          </div>
+
+          <div class="col s6 center">
+            <button class="modal-action modal-close waves-effect btn-large red lighten-1 white-text"
+              type="submit">{{"Cancelar" | translate}}
+              <i class="material-icons right">cancel</i>
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div id="modalAgregaCarrito" class="modal">
+  <div class="modal-content">
+    <div class="container">
+      <h2 class="center">{{"Cantidad de Producto" | translate}}</h2>
+      <form id="carritoForm">
+        <div class="row">
+          <div class="input-field col s12">
+            <i class="material-icons prefix">money</i>
+            <input [(ngModel)]="cantidad" type="number" id="cantidadCarrito" name="cantidadCarrito" required>
+            <label for="cantidadCarrito" class="active">{{"Cantidad" | translate}}</label>
+          </div>
+
+        </div>
+        <div class="row">
+          <div class="col s6 center">
+            <a (click)="guardaCarrito(cantidad)">
+              <button class="waves-effect btn-large red lighten-1 white-text" type="submit">
+                {{"Agregar" | translate}}
+                <i class="material-icons right">add</i>
+              </button>
+            </a>
+          </div>
+
+          <div class="col s6 center">
+            <button class="modal-action modal-close waves-effect btn-large red lighten-1 white-text"
+              type="submit">{{"Cancelar" | translate}}
+              <i class="material-icons right">cancel</i>
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div id="modalNuevoProducto" class="modal">
+  <div class="modal-content">
+    <div class="container">
+      <h2 class="center">{{"Nuevo Producto" | translate}}</h2>
+      <form id="NuevoForm">
+        <div class="row">
+          <div class="input-field col s6">
+            <i class="material-icons prefix">assignment</i>
+            <input [(ngModel)]="producto.nombre" type="text" id="nombre" name="nombre" required>
+            <label for="nombre" class="active">{{"Nombre en español" | translate}}</label>
+          </div>
+          <div class="input-field col s6">
+            <i class="material-icons prefix">assignment</i>
+            <input [(ngModel)]="producto.name" type="text" id="nombre" name="nombre" required>
+            <label for="nombre" class="active">{{"Nombre en inglés" | translate}}</label>
+          </div>
+          <div class="input-field col s6">
+            <i class="material-icons prefix">pets</i>
+            <input [(ngModel)]="producto.animal" type="text" id="animal" name="animal" required>
+            <label for="animal" class="active">Animal {{"en español" | translate}}</label>
+          </div>
+          <div class="input-field col s6">
+            <i class="material-icons prefix">pets</i>
+            <input [(ngModel)]="producto.animal_eng" type="text" id="animal" name="animal" required>
+            <label for="animal" class="active">Animal {{"en inglés" | translate}}</label>
+          </div>
+          <div class="input-field col s12">
+            <i class="material-icons prefix">attach_money</i>
+            <input [(ngModel)]="producto.precio" type="number" id="precio" name="precio" required>
+            <label for="precio" class="active">{{"Precio" | translate}}</label>
+          </div>
+          <div class="input-field col s6">
+            <i class="material-icons prefix">comment</i>
+            <input [(ngModel)]="producto.descripcion" type="text" id="descripcion" name="descripcion" required>
+            <label for="descripcion" class="active">{{"Descripción" | translate}} {{"en español" | translate}} </label>
+          </div>
+          <div class="input-field col s6">
+            <i class="material-icons prefix">comment</i>
+            <input [(ngModel)]="producto.description" type="text" id="descripcion" name="descripcion" required>
+            <label for="descripcion" class="active">{{"Descripción" | translate}} {{"en inglés" | translate}}</label>
+          </div>
+          <div class="input-field col s12">
+            <i class="material-icons prefix">money</i>
+            <input [(ngModel)]="producto.cantidad" type="number" id="cantidad" name="cantidad" required>
+            <label for="cantidad" class="active">{{"Cantidad disponible" | translate}}</label>
+          </div>
+          <div class="input-field col s12">
+            <label>{{"Imagen del producto" | translate}}</label>
+            <br><br>
+            <input type="file" (change)="cargandoImagen($event.target)" multiple>
+          </div>
+
+
+        </div>
+        <div class="row">
+          <div class="col s6 center">
+            <a (click)="guardaNuevoProducto()">
+              <button class="waves-effect btn-large red lighten-1 white-text" type="submit">
+                {{"Crear" | translate}}
+                <i class="material-icons right">send</i>
+              </button>
+            </a>
+          </div>
+
+          <div class="col s6 center">
+            <button class="modal-action modal-close waves-effect btn-large red lighten-1 white-text"
+              type="submit">{{"Cancelar" | translate}}
+              <i class="material-icons right">cancel</i>
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div id="modalError" class="modal">
+  <div class="modal-content">
+    <h4>{{"Error garrafal :(" | translate}}</h4>
+    <p>{{"Esta cantidad no está permitida :(" | translate}}</p>
+  </div>
+  <div class="modal-footer">
+    <a (click)="cerrErr()">
+      <button class="waves-effect btn-large red lighten-1 white-text" type="submit">
+        {{"OK" | translate}}
+      </button>
+    </a>
+  </div>
+</div>
+
+
+<div id="Imagen" class="modal">
+  <div class="modal-content">
+    <div class="row" style="margin-bottom: 0px !important;">
+      <div class="col s12">
+        <h5 class="center">{{"Imagen" | translate}}</h5>
+      </div>
+    </div>
+    <div style="border: .5px solid #78909c; padding: 10px;">
+      <div class="row">
+        <div class="input-field col s12">
+
+          <div align="center">
+            <img *ngIf="producto.fotito === 1" width="64" src="{{liga}}/{{producto.id}}.jpg"
+              alt="{{liga}}/{{producto.id}}.jpg">
+            <img *ngIf="producto.fotito === 0" width="64" src="{{liga}}/0.jpg" alt="{{liga}}/0.jpg">
+          </div>
+        </div>
+
+        <div class="input-field col s6">
+          <label>{{"Imagen del producto" | translate}}</label>
+          <br><br>
+          <input type="file" (change)="cargandoImagen($event.target)" multiple>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col s6 center">
+          <a class="waves-effect btn-large brown lighten-3 black-text modal-close"
+            (click)="ActualizaImagen()">{{"Enviar" | translate}}</a>
+        </div>
+        <div class="col s6 center">
+          <a class="modal-action modal-close waves-effect btn-large brown lighten-3
+  black-text">{{"Cancelar" | translate}}</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
